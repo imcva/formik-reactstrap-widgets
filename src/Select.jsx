@@ -1,7 +1,6 @@
 import React from 'react'
-import { FormGroup, Label, Input } from 'reactstrap'
-import { Field } from 'formik'
-import FieldErrorText from './FieldErrorText'
+import { Input } from 'reactstrap'
+import FieldGroup from './FieldGroup';
 
 const Options = (props) => {
   if (props.children) {
@@ -15,39 +14,18 @@ const Options = (props) => {
   }
 }
 
-const SelectField = (props) => {
-  const { field, form, selectProps } = props
-  const { label, children, row } = selectProps
-  const { name } = field
-  const { touched, errors } = form
-  return (
-    <FormGroup row={row}>
-      <Label for={name}>{label}</Label>
-      <Input
-        {...selectProps}
-        {...field}
-        type='select'
-        data-testid="field-input"
-        id={name}
-        invalid={touched[name] && errors[name] ? true : false}
-        validate={undefined}
-      >
-        <Options options={selectProps.options} children={children} />
-      </Input>
-      <FieldErrorText touched={touched[name]} error={errors[name]} />
-    </FormGroup>
-  )
-}
-
 const Select = (props) => {
   return (
-    <Field
+    <FieldGroup 
       {...props}
-      name={props.name}
-      component={SelectField}
-      render={undefined}
-      children={undefined}
-      selectProps={props}
+      render={(fieldProps) => (
+        <Input
+          {...fieldProps}
+          type='select'
+        >
+          <Options options={fieldProps.options} children={fieldProps.children} />
+        </Input>
+      )}
     />
   )
 }
