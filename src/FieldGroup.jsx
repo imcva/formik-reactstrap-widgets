@@ -30,7 +30,7 @@ const Group = (props) => {
         : null
       }
       {invalid
-        ? <FormFeedback data-testid='invalid-text'>{errors[name]}</FormFeedback>
+        ? <FormFeedback className='d-block' data-testid='invalid-text'>{errors[name]}</FormFeedback>
         : null
       }
     </FormGroup>
