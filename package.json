@@ -11,10 +11,11 @@
     "form"
   ],
   "scripts": {
-    "build": "webpack --mode production",
+    "build": "rollup -c",
     "build-storybook": "build-storybook",
     "storybook": "start-storybook -p 6006",
-    "test": "jest"
+    "test": "jest",
+    "version": "npm run build"
   },
   "author": "Brandon Might",
   "license": "ISC",
