@@ -1,12 +1,20 @@
 {
   "name": "formik-reactstrap-widgets",
-  "version": "0.0.1",
+  "version": "0.0.7",
   "description": "Bootstrap form fields and widgets for Formik",
-  "main": "src/index.js",
+  "main": "dist/bundle.js",
+  "keywords": [
+    "react",
+    "bootstrap",
+    "reactstrap",
+    "formik",
+    "form"
+  ],
   "scripts": {
-    "test": "jest",
+    "build": "webpack --mode production",
+    "build-storybook": "build-storybook",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "test": "jest"
   },
   "author": "Brandon Might",
   "license": "ISC",
@@ -21,20 +29,32 @@
     "@testing-library/react": "^8.0.4",
     "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",
+    "bootstrap": "^4.3.1",
+    "css-loader": "^3.1.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.8.0",
     "jest-dom": "^3.5.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "react-testing-library": "^8.0.1",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-postcss": "^2.0.3",
     "storybook": "^1.0.0",
-    "webpack": "^4.35.2"
+    "style-loader": "^0.23.1",
+    "webpack": "^4.35.2",
+    "webpack-cli": "^3.3.6"
   },
-  "dependencies": {
+  "peerDependencies": {
     "bootstrap": "^4.3.1",
     "formik": "^1.5.7",
     "react": "^16.8.6",
-    "react-datepicker": "^2.8.0",
     "react-dom": "^16.8.6",
     "reactstrap": "^8.0.0"
+  },
+  "dependencies": {
+    "react-datepicker": "^2.8.0",
+    "rollup-plugin-commonjs": "^10.0.1"
   },
   "jest": {
     "moduleNameMapper": {
