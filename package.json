@@ -1,6 +1,6 @@
 {
   "name": "formik-reactstrap-widgets",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Bootstrap form fields and widgets for Formik",
   "main": "dist/bundle.js",
   "keywords": [
