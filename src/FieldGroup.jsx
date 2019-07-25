@@ -7,7 +7,7 @@ import {
 import { Field } from 'formik';
 
 const Group = (props) => {
-  const { formik, label, render } = props
+  const { formik, label, render, validate } = props
   const { field, form } = formik
   const { name } = field
   const { touched, errors } = form
@@ -23,17 +23,20 @@ const Group = (props) => {
   delete inputProps.validate
   delete inputProps.render
   return (
-    <FormGroup row={props.row}>
-      <Label for={name}>{label}</Label>
+    <>
+      {props.DisplayLabel === undefined || props.DisplayLabel === true
+        ? <Label for={name}>{label}</Label>
+        : null
+      }
       { typeof render === 'function'
         ? render(inputProps) 
         : null
       }
-      {invalid
+      {invalid && validate
         ? <FormFeedback className='d-block' data-testid='invalid-text'>{errors[name]}</FormFeedback>
         : null
       }
-    </FormGroup>
+    </>
   )
 }
 
@@ -45,9 +48,17 @@ const FieldGroup = (props) => {
   return (
     <Field
       {...fieldProps}
-      render={(formik) => ( 
-        <Group formik={formik} {...props}  />
-      )}
+      render={(formik) => {
+        if (props.FormGroup === undefined || props.FormGroup === true) {
+          return (
+            <FormGroup row={props.row} check={props.check}>
+              <Group formik={formik} {...props}  />
+            </FormGroup>
+          )
+        } else {
+          return <Group formik={formik} {...props}  />
+        }
+      }}
     />
   )
 }
