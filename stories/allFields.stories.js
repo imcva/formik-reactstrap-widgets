@@ -8,29 +8,10 @@ import {
   DatePicker,
   Input,
   Select,
-  Radio
+  Choice
 } from '../src';
 
 import 'bootstrap/dist/css/bootstrap.css'
-
-const validateBetweenDates = (value) => {
-  let error;
-  if (value && value != '') {
-    value = new Date(value)
-  }
-
-  if (value instanceof Date) {
-    const minDate = '7/1/2019'
-    const maxDate = '7/31/2019'
-    const timeValue = value.getTime()
-    const minDateTime = new Date(minDate).getTime()
-    const maxDateTime = new Date(maxDate).getTime()
-    if (timeValue > minDateTime && timeValue > maxDateTime) {
-      error = `Date must be between ${minDate} and ${maxDate}`;
-    }
-  }
-  return error;
-}
 
 storiesOf('All Input Fields', module)
   .add('Jane Doe', () => (
@@ -53,18 +34,18 @@ storiesOf('All Input Fields', module)
                   <option value='male'>Male</option>
                   <option value='other'>Other</option>
                 </Select>
-                <Radio name='color' label='Favorite Color:'>
+                <Choice name='color' label='Favorite Color:'>
                   <option value='red'>Red</option>
                   <option value='green'>Green</option>
                   <option value='blue'>Blue</option>
                   <option value='other'>Other</option>
-                </Radio>
-                <Radio name='pet' button group label='Favorite Pet:'>
-                  <option value='dog'>Dog</option>
-                  <option value='cat'>Cat</option>
-                  <option value='fish'>Fish</option>
-                  <option value='other'>Other</option>
-                </Radio>
+                </Choice>
+                <Choice multiple name='pet' button group label='Favorite Pets (Multiple):'>
+                  <option name='dog-favorite' value='dog'>Dog</option>
+                  <option name='cat-favorite' value='cat'>Cat</option>
+                  <option name='fish-favorite' value='fish'>Fish</option>
+                  <option name='other-favorite' value='other'>Other</option>
+                </Choice>
                 <Button>Submit</Button>
               </Form>
             )}

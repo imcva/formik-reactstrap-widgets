@@ -1,6 +1,6 @@
 import DatePicker from './DatePicker'
 import Input from './Input'
 import Select from './Select'
-import Radio from './Radio'
+import Choice from './Choice'
 
-export { DatePicker, Input, Select, Radio }
+export { DatePicker, Input, Select, Choice }

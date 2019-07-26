@@ -8,7 +8,7 @@ import {
 import { Formik, Form } from 'formik'
 import 'jest-dom/extend-expect'
 
-import Radio from '../src/Radio'
+import Choice from '../src/Choice'
 
 afterEach(cleanup)
 
@@ -39,11 +39,11 @@ test('Basic Radio With Children', async () => {
       }}
       onSubmit={onSubmit}
     >
-      <Radio name='color' label='Color: '>
+      <Choice name='color' label='Color: '>
         <option value='red'>Red</option>
         <option value='blue'>Blue</option>
         <option value='green'>Green</option>
-      </Radio>
+      </Choice>
     </FormWrapper>
   )
   const red = getByLabelText('Red')
@@ -77,7 +77,7 @@ test('Basic Radio With Options Prop', async () => {
       }}
       onSubmit={onSubmit}
     >
-      <Radio name='color' options={options} />
+      <Choice name='color' options={options} />
     </FormWrapper>
   )
   const red = getByLabelText('Red')
@@ -111,7 +111,7 @@ test('Button Radio With Options Prop', async () => {
       }}
       onSubmit={onSubmit}
     >
-      <Radio button name='color' options={options} />
+      <Choice button name='color' options={options} />
     </FormWrapper>
   )
   const red = getByTestId('color-red')
@@ -143,7 +143,7 @@ test('All Disabled Radios', async () => {
         color: 'green'
       }}
     >
-      <Radio disabled name='color' options={options} />
+      <Choice disabled name='color' options={options} />
     </FormWrapper>
   )
   const red = getByTestId('color-red')
@@ -166,7 +166,7 @@ test('Single Disabled Radios', async () => {
         color: 'green'
       }}
     >
-      <Radio name='color' options={options} />
+      <Choice name='color' options={options} />
     </FormWrapper>
   )
   const red = getByTestId('color-red')
@@ -191,7 +191,7 @@ test('Radio Validation', async () => {
         }} 
         onSubmit={onSubmit}
       >
-      <Radio name='color' options={options} validate={validateRequired} />
+      <Choice name='color' options={options} validate={validateRequired} />
     </FormWrapper>
   )
   const form = getByTestId('form')
