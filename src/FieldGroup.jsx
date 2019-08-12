@@ -4,6 +4,7 @@ import {
   FormGroup,
   FormFeedback
 } from 'reactstrap'
+import get from 'lodash/get'
 import { Field } from 'formik';
 
 const Group = (props) => {
@@ -11,7 +12,9 @@ const Group = (props) => {
   const { field, form } = formik
   const { name } = field
   const { touched, errors } = form
-  const invalid = touched[name] && errors[name] ? true : false
+  const fieldTouched = get(touched, name)
+  const fieldErrors = get(errors, name)
+  const invalid = fieldErrors && fieldTouched ? true : false
   const baseProps = {
     ...props,
     ...field,
