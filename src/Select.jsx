@@ -14,7 +14,7 @@ const Options = (props) => {
         }
       </>
     ) 
-  } else if (props.options) {
+  } else if (Array.isArray(options) && options.length) {
     const opts = props.options.map((opt, index) => {
       return (<option {...opt} key={index}>{opt.text}</option>)
     })
@@ -36,7 +36,7 @@ const getFirstOptionValue = (options, children) => {
   if (children) {
     const child = React.Children.toArray(children)[0]
     return child.props.value
-  } else if (options) {
+  } else if (Array.isArray(options) && options.length) {
     const option = options[0]
     return option.value
   } else {

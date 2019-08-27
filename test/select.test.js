@@ -136,3 +136,24 @@ test('Input Level Validation', async () => {
     expect(invalidText).toBeVisible()
   })
 })
+
+test('Render empty options', async () => {
+  const onSubmit = jest.fn()
+  const options = []
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: ''
+      }}
+      onSubmit={onSubmit}
+    >
+      <Select name='color' options={options} />
+    </FormWrapper>
+  )
+  const input = getByTestId('field-input')
+  const form = getByTestId('form')
+  fireEvent.submit(form)
+  await wait(() => {
+    expect(input.value).toBe('')
+  })
+})
