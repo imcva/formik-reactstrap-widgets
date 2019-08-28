@@ -22,7 +22,7 @@ storiesOf('All Input Fields', module)
             onSubmit={action('form-submitted')}
             initialValues={{
               name: 'Jane Doe',
-              birthday: '1/1/1900',
+              birthday: '2019-05-03T04:00:00.000Z',
               gender: 'female'
             }}
             render={(props) => ( 

@@ -6,20 +6,33 @@ import FieldGroup from './FieldGroup';
 import "react-datepicker/dist/react-datepicker.css";
 import "./DatePicker.css"
 
+const formatValue = (value) => {
+  if (value) {
+    const date = new Date(value)
+    if (date.toString() === 'Invalid Date') {
+      return undefined
+    } {
+      return date
+    }
+  }
+  return undefined
+}
+
 const DatePicker = (props) => (
   <FieldGroup
     {...props}
-    render={(fieldProps) => (
-      <ReactDatePicker
+    render={(fieldProps) => {
+      return (<ReactDatePicker
         isClearable
         {...fieldProps}
-        selected={(fieldProps.value && new Date(fieldProps.value)) || null}
+        value={undefined}
+        selected={formatValue(fieldProps.value)}
         onChange={(date) => {
           fieldProps.formik.form.setFieldValue(fieldProps.name, date)
         }}
         customInput={<Input {...fieldProps} />}
       />
-    )}
+    )}}
   />
 )
 
