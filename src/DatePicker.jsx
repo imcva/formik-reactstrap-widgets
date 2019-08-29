@@ -1,7 +1,9 @@
 import React from 'react'
 import ReactDatePicker from 'react-datepicker'
-import { Input } from 'reactstrap'
+import { Input, InputGroup, InputGroupAddon, Button } from 'reactstrap'
 import FieldGroup from './FieldGroup';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faCalendarAlt } from '@fortawesome/free-regular-svg-icons'
 
 import "react-datepicker/dist/react-datepicker.css";
 import "./DatePicker.css"
@@ -18,19 +20,32 @@ const formatValue = (value) => {
   return undefined
 }
 
+const DatePickerInput = (props) => {
+  return ( 
+    <InputGroup>
+      <Input {...props} />
+      <InputGroupAddon addonType="append">
+        <Button className='border' color='light' onClick={props.onClick}>
+          <FontAwesomeIcon icon={faCalendarAlt} />
+        </Button>
+      </InputGroupAddon>
+    </InputGroup>
+  )
+}
+
 const DatePicker = (props) => (
   <FieldGroup
     {...props}
     render={(fieldProps) => {
       return (<ReactDatePicker
-        isClearable
+        todayButton='Today'
         {...fieldProps}
         value={undefined}
         selected={formatValue(fieldProps.value)}
         onChange={(date) => {
           fieldProps.formik.form.setFieldValue(fieldProps.name, date)
         }}
-        customInput={<Input {...fieldProps} />}
+        customInput={<DatePickerInput {...fieldProps} />}
       />
     )}}
   />
