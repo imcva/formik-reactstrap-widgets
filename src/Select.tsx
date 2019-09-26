@@ -1,8 +1,20 @@
 import React, { useEffect, useState } from 'react'
-import { Input } from 'reactstrap'
-import FieldGroup from './FieldGroup';
+import { Input, InputProps } from 'reactstrap'
+import FieldGroup, { FieldGroupProps, FieldGroupRenderProps } from './FieldGroup';
 
-const Options = (props) => {
+interface IOption {
+  value: string,
+  text: string
+  [key: string]: any
+}
+type OptionsArray = Array<IOption>
+
+interface OptionsProps {
+  options: OptionsArray,
+  insertOption?: string
+}
+
+const Options: React.FC<OptionsProps> = (props) => {
   const { options, children, insertOption } = props
   if (children) {
     return (
@@ -32,7 +44,7 @@ const Options = (props) => {
   }
 }
 
-const getFirstOptionValue = (options, children) => {
+const getFirstOptionValue = (options: Array<{value: string}>, children: React.Component | JSX.Element) => {
   if (children) {
     const child = React.Children.toArray(children)[0]
     return child.props.value
@@ -44,7 +56,7 @@ const getFirstOptionValue = (options, children) => {
   }
 }
 
-const checkOptionAvailable = (value, options, children) => {
+const checkOptionAvailable = (value: string, options: OptionsArray, children: React.Component | JSX.Element) => {
   if (children) {
     const child = React.Children.toArray(children).find(c => {
       if(c.props) {
@@ -61,11 +73,15 @@ const checkOptionAvailable = (value, options, children) => {
   }
 }
 
-const Select = (props) => {
+type SelectProps = FieldGroupProps & InputProps
+
+const Select: React.FC<SelectProps> = (props) => {
   return (
     <FieldGroup 
-      {...props}
-      render={(fieldProps) => { 
+      name={props.name}
+      component={props.component}
+      validate={props.validate}
+      render={(fieldProps: FieldGroupRenderProps) => { 
         const [ insertOption , setInsertOption ] = useState()
         useEffect(() => {
           if (fieldProps.value === undefined) {
@@ -81,12 +97,24 @@ const Select = (props) => {
 
         return (
           <Input
-            {...fieldProps}
+            {...fieldProps.field}
+            data-testid={fieldProps['data-testid']}
+            disabled={props.disabled}
             type='select'
+            size={props.size}
+            bsSize={props.bsSize}
+            valid={props.valid}
+            invalid={!!props.invalid ? props.invalid : fieldProps.invalid}
+            tag={props.tag}
+            innerRef={props.innerRef} 
+            plaintext={props.plaintext}
+            addon={props.addon}
+            className={props.className}
+            cssModule={props.cssModule}
           >
             <Options
-              options={fieldProps.options}
-              children={fieldProps.children}
+              options={props.options}
+              children={props.children}
               insertOption={insertOption}
             />
           </Input>
@@ -97,3 +125,4 @@ const Select = (props) => {
 }
 
 export default Select
+export { SelectProps }

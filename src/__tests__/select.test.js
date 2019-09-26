@@ -8,7 +8,7 @@ import {
 import { Formik, Form } from 'formik'
 import 'jest-dom/extend-expect'
 
-import Select from '../src/Select'
+import Select from '../Select'
 
 afterEach(cleanup)
 

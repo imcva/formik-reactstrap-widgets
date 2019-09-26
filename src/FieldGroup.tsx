@@ -4,10 +4,26 @@ import {
   FormGroup,
   FormFeedback
 } from 'reactstrap'
+// @ts-ignore
 import get from 'lodash/get'
-import { Field } from 'formik';
+import { Field, FieldProps } from 'formik';
 
-const Group = (props) => {
+interface GroupProps {
+  formik: FieldProps,
+  render: (inputProps: any) => React.Component | JSX.Element
+  validate: any
+  DisplayLabel?: boolean
+  label?: React.Component | String
+}
+
+interface FieldGroupRenderProps extends GroupProps {
+  field: Object
+  id: string
+  invalid: boolean
+  [key: string]: any
+}
+
+const Group: React.FC<GroupProps> = (props) => {
   const { formik, label, render, validate } = props
   const { field, form } = formik
   const { name } = field
@@ -15,9 +31,10 @@ const Group = (props) => {
   const fieldTouched = get(touched, name)
   const fieldErrors = get(errors, name)
   const invalid = fieldErrors && fieldTouched ? true : false
-  const baseProps = {
+  const baseProps: FieldGroupRenderProps = {
     ...props,
     ...field,
+    field: field,
     invalid,
     id: name,
     'data-testid': 'field-input'
@@ -41,9 +58,17 @@ const Group = (props) => {
       }
     </>
   )
+} 
+
+interface FieldGroupProps extends Omit<GroupProps, 'formik'>{
+  component: React.Component
+  row?: boolean
+  FormGroup?: boolean
+  check?: boolean 
+  name: string
 }
 
-const FieldGroup = (props) => {
+const FieldGroup: React.FC<FieldGroupProps> = (props) => {
   const fieldProps = Object.assign({}, props)
   delete fieldProps.children
   delete fieldProps.render
@@ -51,15 +76,29 @@ const FieldGroup = (props) => {
   return (
     <Field
       {...fieldProps}
-      render={(formik) => {
+      render={(formik: FieldProps) => {
         if (props.FormGroup === undefined || props.FormGroup === true) {
           return (
             <FormGroup row={props.row} check={props.check}>
-              <Group formik={formik} {...props}  />
+              <Group 
+                formik={formik}
+                label={props.label}
+                render={props.render}
+                DisplayLabel={props.DisplayLabel}
+                validate={props.validate}
+              />
             </FormGroup>
           )
         } else {
-          return <Group formik={formik} {...props}  />
+          return (
+            <Group 
+              formik={formik}
+              label={props.label}
+              render={props.render}
+              DisplayLabel={props.DisplayLabel}
+              validate={props.validate}
+            />
+          )
         }
       }}
     />
@@ -67,3 +106,4 @@ const FieldGroup = (props) => {
 }
 
 export default FieldGroup
+export { FieldGroupProps, FieldGroupRenderProps }

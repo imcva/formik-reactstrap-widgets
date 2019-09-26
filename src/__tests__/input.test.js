@@ -8,25 +8,16 @@ import {
 import { Formik, Form } from 'formik'
 import 'jest-dom/extend-expect'
 
-import DatePicker from '../src/DatePicker'
+import Input from '../Input'
 
 afterEach(cleanup)
 
-const validateBetweenDates = (value) => {
+const validateEmail = (value) => {
   let error;
-  if (value && value != '') {
-    value = new Date(value)
-  }
-
-  if (value instanceof Date) {
-    const minDate = '7/1/2019'
-    const maxDate = '7/31/2019'
-    const timeValue = value.getTime()
-    const minDateTime = new Date(minDate).getTime()
-    const maxDateTime = new Date(maxDate).getTime()
-    if (timeValue > minDateTime && timeValue > maxDateTime) {
-      error = `Date must be between ${minDate} and ${maxDate}`;
-    }
+  if (!value) {
+    error = 'Required';
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)) {
+    error = 'Invalid email address';
   }
   return error;
 }
@@ -47,23 +38,23 @@ test('Basic Input onSubmit', async () => {
   const { getByTestId } = render(
     <FormWrapper 
       initialValues={{
-        birthday: new Date('12/19/2019')
+        email: 'test'
       }}
       onSubmit={onSubmit}
     >
-      <DatePicker name='birthday' />
+      <Input name='email' />
     </FormWrapper>
   )
   const input = getByTestId('field-input')
   const form = getByTestId('form')
-  expect(input.value).toBe('12/19/2019')
-  const newValue = '01/23/2019'
+  expect(input.value).toBe('test')
+  const newValue = 'Hello World'
   fireEvent.change(input, { target: { value: newValue } })
   expect(input.value).toBe(newValue)
   fireEvent.submit(form)
   await wait(() => {
     expect(onSubmit).toHaveBeenCalledTimes(1)
-    expect(onSubmit).toHaveBeenCalledWith({ birthday: new Date(newValue) }, expect.any(Object))
+    expect(onSubmit).toHaveBeenCalledWith({ email: newValue }, expect.any(Object))
   })
 })
 
@@ -71,11 +62,11 @@ test('Disabled Input', async () => {
   const { debug, getByTestId } = render(
     <FormWrapper 
       initialValues={{
-        birthday: '12/09/2019'
+        email: 'test'
       }}
       onSubmit={(v, f) => null}
     >
-      <DatePicker name='birthday' disabled />
+      <Input name='email' disabled />
     </FormWrapper>
   )
   const input = getByTestId('field-input')
@@ -86,11 +77,11 @@ test('Input Level Validation', async () => {
   const { getByTestId } = render(
     <FormWrapper 
       initialValues={{
-        birthday: '12/09/2019'
+        email: 'test'
       }}
       onSubmit={(v, f) => null}
     >
-      <DatePicker name='birthday' validate={validateBetweenDates} />
+      <Input name='email' validate={validateEmail} />
     </FormWrapper>
   )
   const input = getByTestId('field-input')
