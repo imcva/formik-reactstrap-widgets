@@ -5,7 +5,7 @@ import className from 'classname'
 import OptionLevelErrors, { OptionLevelErrorsProps } from './OptionLevelErrors'
 
 interface GroupProps extends OptionLevelErrorsProps {
-  group: boolean
+  group?: boolean
 }
 
 const Group: React.FC<GroupProps> = (props) => {

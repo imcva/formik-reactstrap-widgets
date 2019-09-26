@@ -3,23 +3,25 @@ import { FieldProps } from 'formik'
 // @ts-ignore
 import get from 'lodash/get'
 
-const getValue = (name: string, formik: FieldProps) => {
+const getValue = (name: string | undefined, formik: FieldProps) => {
   return get(formik.form.values, name)
 }
 
-const setValue = (name: string, value: any, multiple: boolean, formik: FieldProps) => {
-  const currentValue = getValue(name, formik)
-  const multipleValue = currentValue ? false : true
-  const newValue = multiple ? multipleValue : value
-  formik.form.setFieldValue(name, newValue)
+const setValue = (name: string | undefined, value: any, multiple: boolean | undefined, formik: FieldProps) => {
+  if (name) {
+    const currentValue = getValue(name, formik)
+    const multipleValue = currentValue ? false : true
+    const newValue = multiple ? multipleValue : value
+    formik.form.setFieldValue(name, newValue)
+  }
 }
 
-const getActive = (name: string, value: any, formik: FieldProps) => {
+const getActive = (name: string | undefined, value: any, formik: FieldProps) => {
   const currentValue = getValue(name, formik)
   return currentValue === true ? true : value === currentValue
 }
 
-const convertOptionsFromChildren = <O extends {}>(opts: Array<O>, children: ReactNode ): Array<O> => {
+const convertOptionsFromChildren = <O extends {}>(opts: Array<O> | undefined, children: ReactNode | undefined): Array<O> => {
   if (opts) {
     return opts
   } else if (children) {

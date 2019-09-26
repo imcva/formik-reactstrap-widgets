@@ -3,6 +3,7 @@ import FieldGroup, { FieldGroupRenderProps, FieldGroupProps } from '../FieldGrou
 
 import { convertOptionsFromChildren } from './helpers'
 import ChoiceChildren, { ChoiceChildrenProps } from './ChoiceChildren'
+import Option, { OptionProps } from './Option'
 
 interface IOption {
   value: string,
@@ -10,14 +11,13 @@ interface IOption {
   [key: string]: any
 }
 
-type ChoiceProps = ChoiceChildrenProps & FieldGroupProps
+type ChoiceProps = Omit<ChoiceChildrenProps, 'fieldProps'> & Omit<FieldGroupProps, 'render'>
 
 const Choice: React.FC<ChoiceProps> = (props) => { 
   const opts = convertOptionsFromChildren<IOption>(props.options, props.children)
   return (
     <FieldGroup
       name={props.name}
-      component={props.component}
       validate={props.name ? props.validate : undefined}
       render={(fieldProps: FieldGroupRenderProps) => { 
         return (
@@ -36,4 +36,4 @@ const Choice: React.FC<ChoiceProps> = (props) => {
 }
 
 export default Choice
-export { ChoiceProps }
+export { ChoiceProps, Option, OptionProps }

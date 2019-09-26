@@ -10,7 +10,7 @@ import { getActive, setValue } from './helpers'
 
 interface ButtonChoiceProps extends FieldProps, ButtonProps {
   children: string
-  name: string
+  name?: string
   value: any
   form: any
 }

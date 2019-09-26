@@ -44,10 +44,13 @@ const Options: React.FC<OptionsProps> = (props) => {
   }
 }
 
-const getFirstOptionValue = (options: Array<{value: string}>, children: React.Component | JSX.Element) => {
+const getFirstOptionValue = (options: Array<{value: string}>, children: React.Component | JSX.Element | React.ReactNode) => {
   if (children) {
     const child = React.Children.toArray(children)[0]
-    return child.props.value
+    if (child && React.isValidElement(child)) {
+      return child.props.value
+    }
+    return ''
   } else if (Array.isArray(options) && options.length) {
     const option = options[0]
     return option.value
@@ -56,10 +59,10 @@ const getFirstOptionValue = (options: Array<{value: string}>, children: React.Co
   }
 }
 
-const checkOptionAvailable = (value: string, options: OptionsArray, children: React.Component | JSX.Element) => {
+const checkOptionAvailable = (value: string, options: OptionsArray, children: React.ReactNode) => {
   if (children) {
     const child = React.Children.toArray(children).find(c => {
-      if(c.props) {
+      if(c && React.isValidElement(c)) {
         return c.props.value == value
       } 
       return false
@@ -73,38 +76,38 @@ const checkOptionAvailable = (value: string, options: OptionsArray, children: Re
   }
 }
 
-type SelectProps = FieldGroupProps & InputProps
+type SelectProps = Omit<FieldGroupProps, 'render'> & InputProps
 
 const Select: React.FC<SelectProps> = (props) => {
   return (
     <FieldGroup 
       name={props.name}
-      component={props.component}
       validate={props.validate}
       render={(fieldProps: FieldGroupRenderProps) => { 
         const [ insertOption , setInsertOption ] = useState()
+        const { formik } = fieldProps
         useEffect(() => {
-          if (fieldProps.value === undefined) {
-            const firstOptionValue = getFirstOptionValue(fieldProps.options, fieldProps.children)
-            fieldProps.formik.form.setFieldValue(fieldProps.name, firstOptionValue)
+          if (formik.field.value === undefined) {
+            const firstOptionValue = getFirstOptionValue(props.options, props.children)
+            fieldProps.formik.form.setFieldValue(formik.field.name, firstOptionValue)
           } else {
-            const optionExists = checkOptionAvailable(fieldProps.value, fieldProps.options, fieldProps.children)
+            const optionExists = checkOptionAvailable(formik.field.value, props.options, props.children)
             if (!optionExists) {
-              setInsertOption(fieldProps.value) 
+              setInsertOption(props.value) 
             }
           }
         }, [])
 
         return (
           <Input
-            {...fieldProps.field}
+            {...formik.field}
             data-testid={fieldProps['data-testid']}
             disabled={props.disabled}
             type='select'
             size={props.size}
             bsSize={props.bsSize}
             valid={props.valid}
-            invalid={!!props.invalid ? props.invalid : fieldProps.invalid}
+            invalid={props.invalid || fieldProps.invalid}
             tag={props.tag}
             innerRef={props.innerRef} 
             plaintext={props.plaintext}

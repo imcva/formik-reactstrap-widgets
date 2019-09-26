@@ -11,8 +11,8 @@ interface IOption {
 type OptionsArray = Array<IOption>
 
 interface OptionLevelErrorsProps {
-  options: OptionsArray
-  multiple: boolean
+  options?: OptionsArray
+  multiple?: boolean
   fieldProps: {
     formik: FieldProps
   }

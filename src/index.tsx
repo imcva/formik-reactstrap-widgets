@@ -1,7 +1,7 @@
 import DatePicker, { DatePickerProps } from './DatePicker'
 import Input, { InputProps } from './Input'
 import Select, { SelectProps } from './Select'
-import Choice, { ChoiceProps } from './Choice'
+import Choice, { ChoiceProps, Option, OptionProps } from './Choice'
 
 export { 
   DatePicker,
@@ -11,6 +11,8 @@ export {
   Select,
   SelectProps,
   Choice,
-  ChoiceProps
+  ChoiceProps,
+  Option,
+  OptionProps
 }
 

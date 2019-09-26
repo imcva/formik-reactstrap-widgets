@@ -20,10 +20,10 @@ const formatValue = (value: string) => {
   return undefined
 }
 
-const DatePickerInput: React.FC<InputProps> = (props) => {
+const DatePickerInput: React.FC<InputProps> = (props, ref) => {
   return ( 
     <InputGroup>
-      <Input {...props} />
+      <Input {...props} innerRef={ref} />
       <InputGroupAddon addonType="append">
         <Button className='border' color='light' onClick={props.onClick}>
           <FontAwesomeIcon icon={faCalendarAlt} />
@@ -33,26 +33,27 @@ const DatePickerInput: React.FC<InputProps> = (props) => {
   )
 }
 
-type DatePickerProps = ReactDatePickerProps & FieldGroupProps & InputProps
+const DatePickerInputWithRef = React.forwardRef(DatePickerInput)
+
+type DatePickerProps = Partial<ReactDatePickerProps> & Omit<FieldGroupProps, 'render'> & InputProps
 
 const DatePicker: React.FC<DatePickerProps> = (props) => (
   <FieldGroup
-    component={props.component}
     name={props.name}
     validate={props.validate}
     render={(fieldProps: FieldGroupRenderProps) => {
       return (
         <ReactDatePicker
           todayButton='Today'
-          {...fieldProps.field}
+          {...fieldProps.formik.field}
           disabled={props.disabled}
           value={undefined}
-          selected={formatValue(fieldProps.value)}
+          selected={formatValue(fieldProps.formik.field.value)}
           onChange={(date) => {
-            fieldProps.formik.form.setFieldValue(fieldProps.name, date)
+            fieldProps.formik.form.setFieldValue(props.name, date)
           }}
           customInput={
-            <DatePickerInput 
+            <DatePickerInputWithRef
               data-testid={fieldProps['data-testid']}
               disabled={props.disabled}
               type={props.type}

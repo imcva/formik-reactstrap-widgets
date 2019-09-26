@@ -1,7 +1,7 @@
 import React from 'react'
 import Group from './Group'
-import ButtonChoice from './ButtonChoice'
-import HtmlChoice from './HtmlChoice'
+import ButtonChoice, { ButtonChoiceProps } from './ButtonChoice'
+import HtmlChoice, { HtmlChoiceProps } from './HtmlChoice'
 import { FieldProps } from 'formik'
 
 interface IOption {
@@ -10,12 +10,12 @@ interface IOption {
   [key: string]: any
 }
 
-interface ChoiceChildrenProps {
-  options: Array<IOption>
-  button: boolean
-  name: string
-  multiple: boolean
-  group: boolean
+interface ChoiceChildrenProps extends Omit<ButtonChoiceProps, 'innerRef'>, Omit<HtmlChoiceProps, 'innerRef'> {
+  options?: Array<IOption>
+  button?: boolean
+  name?: string
+  multiple?: boolean
+  group?: boolean
   fieldProps: {
     formik: FieldProps
     [key: string]: any

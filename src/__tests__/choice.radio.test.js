@@ -9,6 +9,7 @@ import { Formik, Form } from 'formik'
 import 'jest-dom/extend-expect'
 
 import Choice from '../Choice'
+import Option from '../Choice/Option'
 
 afterEach(cleanup)
 
@@ -40,9 +41,9 @@ test('Basic Radio With Children', async () => {
       onSubmit={onSubmit}
     >
       <Choice name='color' label='Color: '>
-        <option value='red'>Red</option>
-        <option value='blue'>Blue</option>
-        <option value='green'>Green</option>
+        <Option value='red'>Red</Option>
+        <Option value='blue'>Blue</Option>
+        <Option value='green'>Green</Option>
       </Choice>
     </FormWrapper>
   )

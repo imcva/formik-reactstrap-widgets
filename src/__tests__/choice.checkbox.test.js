@@ -8,7 +8,7 @@ import {
 import { Formik, Form } from 'formik'
 import 'jest-dom/extend-expect'
 
-import Choice from '../Choice'
+import Choice, { Option } from '../Choice'
 
 afterEach(cleanup)
 
@@ -42,9 +42,9 @@ test('Basic Checkbox With Children', async () => {
       onSubmit={onSubmit}
     >
       <Choice multiple label='Color: '>
-        <option name='color.red' value='red'>Red</option>
-        <option name='color.blue' value='blue'>Blue</option>
-        <option name='color.green' value='green'>Green</option>
+        <Option name='color.red' value='red'>Red</Option>
+        <Option name='color.blue' value='blue'>Blue</Option>
+        <Option name='color.green' value='green'>Green</Option>
       </Choice>
     </FormWrapper>
   )

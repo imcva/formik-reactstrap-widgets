@@ -8,12 +8,10 @@ const Input: React.FC<InputProps> = (props) => {
   return (
     <FieldGroup
       name={props.name}
-      children={props.children}
-      component={props.component}
       validate={props.validate}
       render={(fieldProps: FieldGroupRenderProps) => (
         <StrapInput
-          {...fieldProps.field}
+          {...fieldProps.formik.field}
           data-testid={fieldProps['data-testid']}
           disabled={props.disabled}
           type={props.type}

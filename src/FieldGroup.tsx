@@ -10,17 +10,18 @@ import { Field, FieldProps } from 'formik';
 
 interface GroupProps {
   formik: FieldProps,
-  render: (inputProps: any) => React.Component | JSX.Element
-  validate: any
+  render?: (props: FieldGroupRenderProps) => React.ReactNode
+  validate?: any
   DisplayLabel?: boolean
   label?: React.Component | String
 }
 
-interface FieldGroupRenderProps extends GroupProps {
+interface FieldGroupRenderProps {
+  formik: FieldProps,
   field: Object
   id: string
   invalid: boolean
-  [key: string]: any
+  'data-testid': string
 }
 
 const Group: React.FC<GroupProps> = (props) => {
@@ -31,24 +32,20 @@ const Group: React.FC<GroupProps> = (props) => {
   const fieldTouched = get(touched, name)
   const fieldErrors = get(errors, name)
   const invalid = fieldErrors && fieldTouched ? true : false
-  const baseProps: FieldGroupRenderProps = {
-    ...props,
-    ...field,
+  const inputProps: FieldGroupRenderProps = {
+    formik: props.formik,
     field: field,
     invalid,
     id: name,
     'data-testid': 'field-input'
   }
-  const inputProps = Object.assign({}, baseProps)  
-  delete inputProps.validate
-  delete inputProps.render
   return (
     <>
       {props.DisplayLabel === undefined || props.DisplayLabel === true
         ? <Label for={name}>{label}</Label>
         : null
       }
-      { typeof render === 'function'
+      { render && typeof render === 'function'
         ? render(inputProps) 
         : null
       }
@@ -60,8 +57,7 @@ const Group: React.FC<GroupProps> = (props) => {
   )
 } 
 
-interface FieldGroupProps extends Omit<GroupProps, 'formik'>{
-  component: React.Component
+interface FieldGroupProps extends Omit<GroupProps, 'formik'> {
   row?: boolean
   FormGroup?: boolean
   check?: boolean 
@@ -69,13 +65,10 @@ interface FieldGroupProps extends Omit<GroupProps, 'formik'>{
 }
 
 const FieldGroup: React.FC<FieldGroupProps> = (props) => {
-  const fieldProps = Object.assign({}, props)
-  delete fieldProps.children
-  delete fieldProps.render
-  delete fieldProps.component
   return (
     <Field
-      {...fieldProps}
+      name={props.name}
+      validate={props.validate}
       render={(formik: FieldProps) => {
         if (props.FormGroup === undefined || props.FormGroup === true) {
           return (

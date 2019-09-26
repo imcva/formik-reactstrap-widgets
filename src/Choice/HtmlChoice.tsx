@@ -10,8 +10,8 @@ import { getActive, setValue } from './helpers'
 
 interface HtmlChoiceProps extends FieldProps, InputProps {
   children: string
-  name: string
-  multiple: boolean
+  name?: string
+  multiple?: boolean
   value: any
   form: any
 }
