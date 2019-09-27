@@ -116,3 +116,11 @@ storiesOf('Radio Input', module)
       </Choice>
     </>
   ))
+  .add('Button Group Block', () => (
+    <>
+      <Choice name='regularButtons' label='Regular Buttons:' button group block validate={validateRequired}>
+        <option value='blue' color='info'>Blue</option>
+        <option value='red' color='danger'>Red</option>
+      </Choice>
+    </>
+  ))

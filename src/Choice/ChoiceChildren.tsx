@@ -31,6 +31,7 @@ const ChoiceChildren: React.FC<ChoiceChildrenProps> = (props) => {
         multiple={props.multiple}
         fieldProps={props.fieldProps}
         options={props.options}
+        block={props.block}
       >
         {props.options.map((opt, index) => {
           return (

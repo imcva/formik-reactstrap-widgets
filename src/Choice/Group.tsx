@@ -6,13 +6,14 @@ import OptionLevelErrors, { OptionLevelErrorsProps } from './OptionLevelErrors'
 
 interface GroupProps extends OptionLevelErrorsProps {
   group?: boolean
+  block?: boolean
 }
 
 const Group: React.FC<GroupProps> = (props) => {
   if (props.group) {
     return (
       <FormGroup>
-        <ButtonGroup>
+        <ButtonGroup className={props.block ? 'btn-block' : ''}>
           {props.children}
         </ButtonGroup>
         <OptionLevelErrors

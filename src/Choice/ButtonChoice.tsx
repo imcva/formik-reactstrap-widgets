@@ -26,9 +26,10 @@ const ButtonChoice: React.FC<ButtonChoiceProps> = (props) => {
         <Button
           active={getActive(name, value, formik)}
           area-label={props['area-label']}
-          block={props.block}
+          block={!props.group && props.block}
           className={className(
             'my-2',
+            'text-center',
             props.className
           )}
           color={props.color}
