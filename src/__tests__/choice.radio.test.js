@@ -202,3 +202,34 @@ test('Radio Validation', async () => {
     expect(invalidText).toBeVisible()
   })
 })
+
+test('Radio Validation', async () => {
+  const onSubmit = jest.fn()
+  const options = [
+    {value: true, text: 'True'},
+    {value: false, text: 'False'},
+  ]
+  const { getByTestId } = render(
+      <FormWrapper 
+        initialValues={{
+          bool: false
+        }} 
+        onSubmit={onSubmit}
+      >
+      <Choice name='bool' button group options={options} />
+    </FormWrapper>
+  )
+  const trueButton = getByTestId('bool-true')
+  const falseButton = getByTestId('bool-false')
+  const form = getByTestId('form')
+  expect(trueButton).not.toHaveClass('active')
+  expect(falseButton).toHaveClass('active')
+  fireEvent.click(trueButton)
+  expect(trueButton).toHaveClass('active')
+  expect(falseButton).not.toHaveClass('active')
+  fireEvent.submit(form)
+  await wait(() => {
+    expect(onSubmit).toHaveBeenCalledTimes(1)
+    expect(onSubmit).toHaveBeenCalledWith({ bool: true }, expect.any(Object))
+  })
+})
