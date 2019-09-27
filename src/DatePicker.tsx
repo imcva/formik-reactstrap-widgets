@@ -51,7 +51,9 @@ const DatePicker: React.FC<DatePickerProps> = (props) => (
           value={undefined}
           selected={formatValue(fieldProps.formik.field.value)}
           onChange={(date) => {
-            fieldProps.formik.form.setFieldValue(props.name, date)
+            if (props.name) {
+              fieldProps.formik.form.setFieldValue(props.name, date)
+            }
           }}
           customInput={
             <DatePickerInputWithRef

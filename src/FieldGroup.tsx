@@ -61,7 +61,7 @@ interface FieldGroupProps extends Omit<GroupProps, 'formik'> {
   row?: boolean
   FormGroup?: boolean
   check?: boolean 
-  name: string
+  name?: string
 }
 
 const FieldGroup: React.FC<FieldGroupProps> = (props) => {
