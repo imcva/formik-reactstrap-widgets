@@ -17,7 +17,8 @@ interface HtmlChoiceProps extends FieldProps, InputProps {
 }
 
 const HtmlChoice: React.FC<HtmlChoiceProps> = (props) => {
-  const { name, value } = props
+  const { name } = props
+  const value = props.multiple ? true : props.value
   const id = `${name}-${value}`
   return (
     <Field

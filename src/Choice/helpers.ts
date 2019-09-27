@@ -18,9 +18,7 @@ const setValue = (name: string | undefined, value: any, multiple: boolean | unde
 
 const getActive = (name: string | undefined, value: any, formik: FieldProps) => {
   const currentValue = getValue(name, formik)
-  const check = currentValue === value ? true : false
-  console.log(currentValue, value, check)
-  return check
+  return currentValue === value ? true : false
 }
 
 const convertOptionsFromChildren = <O extends {}>(opts: Array<O> | undefined, children: ReactNode | undefined): Array<O> => {

@@ -32,6 +32,7 @@ const FormWrapper = (props) => (
 
 test('Basic Checkbox With Children', async () => {
   const onSubmit = jest.fn()
+  const labelText = 'Color: '
   const { getByTestId, getByLabelText } = render(
     <FormWrapper 
       initialValues={{
@@ -41,17 +42,19 @@ test('Basic Checkbox With Children', async () => {
       }}
       onSubmit={onSubmit}
     >
-      <Choice multiple label='Color: '>
+      <Choice multiple label={labelText}>
         <Option name='color.red' value='red'>Red</Option>
         <Option name='color.blue' value='blue'>Blue</Option>
         <Option name='color.green' value='green'>Green</Option>
       </Choice>
     </FormWrapper>
   )
+  const label = getByTestId('input-label')
   const red = getByLabelText('Red')
   const green = getByLabelText('Green')
   const blue = getByLabelText('Blue')
   const form = getByTestId('form')
+  expect(label.innerHTML).toBe(labelText)
   expect(green.checked).toBeTruthy()
   expect(blue.checked).not.toBeTruthy()
   expect(red.checked).not.toBeTruthy()
@@ -126,9 +129,9 @@ test('Button Radio With Options Prop', async () => {
       <Choice button multiple options={options} />
     </FormWrapper>
   )
-  const red = getByTestId('color.red-red')
-  const green = getByTestId('color.green-green')
-  const blue = getByTestId('color.blue-blue')
+  const red = getByTestId('color.red-true')
+  const green = getByTestId('color.green-true')
+  const blue = getByTestId('color.blue-true')
   const form = getByTestId('form')
   expect(green).toHaveClass('active')
   expect(blue).not.toHaveClass('active')
@@ -166,9 +169,9 @@ test('All Disabled Radios', async () => {
       <Choice disabled multiple options={options} />
     </FormWrapper>
   )
-  const red = getByTestId('color.red-red')
-  const green = getByTestId('color.green-green')
-  const blue = getByTestId('color.blue-blue')
+  const red = getByTestId('color.red-true')
+  const green = getByTestId('color.green-true')
+  const blue = getByTestId('color.blue-true')
   expect(red).toBeDisabled()
   expect(green).toBeDisabled()
   expect(blue).toBeDisabled()
@@ -193,9 +196,9 @@ test('Single Disabled Radios', async () => {
       <Choice multiple options={options} />
     </FormWrapper>
   )
-  const red = getByTestId('color.red-red')
-  const green = getByTestId('color.green-green')
-  const blue = getByTestId('color.blue-blue')
+  const red = getByTestId('color.red-true')
+  const green = getByTestId('color.green-true')
+  const blue = getByTestId('color.blue-true')
   expect(red).toBeDisabled()
   expect(blue).not.toBeDisabled()
   expect(green).not.toBeDisabled()

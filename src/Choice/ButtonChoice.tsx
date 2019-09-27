@@ -16,7 +16,8 @@ interface ButtonChoiceProps extends FieldProps, ButtonProps {
 }
 
 const ButtonChoice: React.FC<ButtonChoiceProps> = (props) => {
-  const { name, value } = props
+  const { name } = props
+  const value = props.multiple ? true : props.value
   const id = `${name}-${value}`
   return (
     <Field
