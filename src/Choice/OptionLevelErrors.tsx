@@ -4,7 +4,7 @@ import { FieldProps } from 'formik'
 import displayError from './DisplayError'
 
 interface IOption {
-  value: string
+  value: any
   text: string
   [key: string]: any
 }

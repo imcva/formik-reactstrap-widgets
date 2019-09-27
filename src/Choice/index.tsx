@@ -6,7 +6,7 @@ import ChoiceChildren, { ChoiceChildrenProps } from './ChoiceChildren'
 import Option, { OptionProps } from './Option'
 
 interface IOption {
-  value: string,
+  value: any,
   text: string
   [key: string]: any
 }

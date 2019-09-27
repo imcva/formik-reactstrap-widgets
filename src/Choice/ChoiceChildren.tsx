@@ -5,7 +5,7 @@ import HtmlChoice, { HtmlChoiceProps } from './HtmlChoice'
 import { FieldProps } from 'formik'
 
 interface IOption {
-  value: string,
+  value: any,
   text: string
   [key: string]: any
 }

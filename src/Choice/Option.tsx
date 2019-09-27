@@ -2,7 +2,7 @@ import React from 'react'
 
 interface OptionProps {
   name?: string,
-  value: string
+  value: any
 }
 
 const Option: React.FC<OptionProps> = (props) => {
