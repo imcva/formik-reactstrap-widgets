@@ -82,6 +82,7 @@ const Select: React.FC<SelectProps> = (props) => {
   return (
     <FieldGroup 
       name={props.name}
+      label={props.label}
       validate={props.validate}
       render={(fieldProps: FieldGroupRenderProps) => { 
         const [ insertOption , setInsertOption ] = useState()

@@ -33,6 +33,7 @@ const FormWrapper = (props) => (
 
 test('Basic Radio With Children', async () => {
   const onSubmit = jest.fn()
+  const labelText = 'Color: '
   const { debug, getByTestId, getByLabelText } = render(
     <FormWrapper 
       initialValues={{
@@ -40,17 +41,19 @@ test('Basic Radio With Children', async () => {
       }}
       onSubmit={onSubmit}
     >
-      <Choice name='color' label='Color: '>
+      <Choice name='color' label={labelText}>
         <Option value='red'>Red</Option>
         <Option value='blue'>Blue</Option>
         <Option value='green'>Green</Option>
       </Choice>
     </FormWrapper>
   )
+  const label = getByTestId('input-label')
   const red = getByLabelText('Red')
   const green = getByLabelText('Green')
   const blue = getByLabelText('Blue')
   const form = getByTestId('form')
+  expect(label.innerHTML).toBe(labelText)
   expect(green.checked).toBeTruthy()
   expect(blue.checked).not.toBeTruthy()
   expect(red.checked).not.toBeTruthy()

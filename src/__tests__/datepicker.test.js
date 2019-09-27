@@ -44,6 +44,7 @@ const FormWrapper = (props) => (
 
 test('Basic Input onSubmit', async () => {
   const onSubmit = jest.fn()
+  const labelText = 'Birthday: '
   const { getByTestId } = render(
     <FormWrapper 
       initialValues={{
@@ -51,11 +52,13 @@ test('Basic Input onSubmit', async () => {
       }}
       onSubmit={onSubmit}
     >
-      <DatePicker name='birthday' />
+      <DatePicker label={labelText} name='birthday' />
     </FormWrapper>
   )
+  const label = getByTestId('input-label')
   const input = getByTestId('field-input')
   const form = getByTestId('form')
+  expect(label.innerHTML).toBe(labelText)
   expect(input.value).toBe('12/19/2019')
   const newValue = '01/23/2019'
   fireEvent.change(input, { target: { value: newValue } })

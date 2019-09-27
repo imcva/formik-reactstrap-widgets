@@ -7,6 +7,7 @@ type InputProps = StrapInputProps & FieldGroupProps
 const Input: React.FC<InputProps> = (props) => { 
   return (
     <FieldGroup
+      label={props.label}
       name={props.name}
       validate={props.validate}
       render={(fieldProps: FieldGroupRenderProps) => (

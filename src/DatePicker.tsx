@@ -40,6 +40,7 @@ type DatePickerProps = Partial<ReactDatePickerProps> & Omit<FieldGroupProps, 're
 const DatePicker: React.FC<DatePickerProps> = (props) => (
   <FieldGroup
     name={props.name}
+    label={props.label}
     validate={props.validate}
     render={(fieldProps: FieldGroupRenderProps) => {
       return (

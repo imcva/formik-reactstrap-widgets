@@ -32,6 +32,7 @@ const FormWrapper = (props) => (
 
 test('Basic Select With Children', async () => {
   const onSubmit = jest.fn()
+  const labelText = 'Color: '
   const { getByTestId } = render(
     <FormWrapper 
       initialValues={{
@@ -39,15 +40,17 @@ test('Basic Select With Children', async () => {
       }}
       onSubmit={onSubmit}
     >
-      <Select name='color' label='Color: '>
+      <Select name='color' label={labelText}>
         <option value='red'>Red</option>
         <option value='blue'>Blue</option>
         <option value='green'>Green</option>
       </Select>
     </FormWrapper>
   )
+  const label = getByTestId('input-label')
   const input = getByTestId('field-input')
   const form = getByTestId('form')
+  expect(label.innerHTML).toBe(labelText)
   expect(input.value).toBe('green')
   const newValue = 'blue'
   fireEvent.change(input, { target: { value: newValue } })

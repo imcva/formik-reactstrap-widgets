@@ -42,7 +42,7 @@ const Group: React.FC<GroupProps> = (props) => {
   return (
     <>
       {props.DisplayLabel === undefined || props.DisplayLabel === true
-        ? <Label for={name}>{label}</Label>
+        ? <Label data-testid='input-label' for={name}>{label}</Label>
         : null
       }
       { render && typeof render === 'function'

@@ -18,6 +18,7 @@ const Choice: React.FC<ChoiceProps> = (props) => {
   return (
     <FieldGroup
       name={props.name}
+      label={props.label}
       validate={props.name ? props.validate : undefined}
       render={(fieldProps: FieldGroupRenderProps) => { 
         return (

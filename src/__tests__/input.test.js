@@ -35,6 +35,7 @@ const FormWrapper = (props) => (
 
 test('Basic Input onSubmit', async () => {
   const onSubmit = jest.fn()
+  const labelText = 'E-Mail: '
   const { getByTestId } = render(
     <FormWrapper 
       initialValues={{
@@ -42,11 +43,13 @@ test('Basic Input onSubmit', async () => {
       }}
       onSubmit={onSubmit}
     >
-      <Input name='email' />
+      <Input name='email' label={labelText} />
     </FormWrapper>
   )
+  const label = getByTestId('input-label')
   const input = getByTestId('field-input')
   const form = getByTestId('form')
+  expect(label.innerHTML).toBe(labelText)
   expect(input.value).toBe('test')
   const newValue = 'Hello World'
   fireEvent.change(input, { target: { value: newValue } })
