@@ -27,7 +27,7 @@ const convertOptionsFromChildren = <O extends {}>(opts: Array<O> | undefined, ch
   } else if (children) {
     let options
     if (React.isValidElement(children)) {
-      options = {...children.props}
+      options = {...children.props, text: children.props.children}
     } else {
       options = React.Children.map(children, (child: React.Component) => {
         if (child) {
