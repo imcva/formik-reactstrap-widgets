@@ -63,6 +63,7 @@ const DatePicker: React.FC<DatePickerProps> = (props) => (
               fieldProps.formik.form.setFieldValue(props.name, date)
             }
           }}
+          {...props.datePickerProps}
           customInput={
             <DatePickerInputWithRef
               data-testid={fieldProps['data-testid']}
