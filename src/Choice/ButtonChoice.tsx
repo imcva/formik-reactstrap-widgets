@@ -13,6 +13,7 @@ interface ButtonChoiceProps extends FieldProps, ButtonProps {
   name?: string
   value: any
   form: any
+  inputProps?: Object
 }
 
 const ButtonChoice: React.FC<ButtonChoiceProps> = (props) => {
@@ -45,6 +46,7 @@ const ButtonChoice: React.FC<ButtonChoiceProps> = (props) => {
           outline={props.outline}
           size={props.size}
           tag={props.tag}
+          {...props.inputProps}
         >
           {props.children}
         </Button>

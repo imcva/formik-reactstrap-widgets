@@ -12,7 +12,7 @@ import {
   Label
 } from 'reactstrap'
 
-import Choice from '../src/Choice'
+import Choice, { Option } from '../src/Choice'
 
 import 'bootstrap/dist/css/bootstrap.css'
 
@@ -104,19 +104,19 @@ storiesOf('Checkbox Input', module)
   .add('Single Buttons Disabled', () => (
     <>
       <Choice label='Regular Buttons:' multiple button validate={validateRequired}>
-        <option name='regular-blue' value='blue' color='info' className='mx-1'>Blue</option>
-        <option name='regular-green' value='green' color='info' className='mx-1'>Green</option>
-        <option name='regular-red' value='red' color='danger' className='mx-1'>Red</option>
+        <Option name='regular-blue' value='blue' color='info' className='mx-1'>Blue</Option>
+        <Option name='regular-green' value='green' color='info' className='mx-1'>Green</Option>
+        <Option name='regular-red' value='red' color='danger' className='mx-1'>Red</Option>
       </Choice>
       <Choice label='Group Buttons:' multiple button group validate={validateRequired}>
-        <option name='group-blue' value='blue' color='info' disabled>Blue</option>
-        <option name='group-green' value='green' color='info'>Green</option>
-        <option name='group-red' value='red' color='danger'>Red</option>
+        <Option name='group-blue' value='blue' color='info' disabled>Blue</Option>
+        <Option name='group-green' value='green' color='info'>Green</Option>
+        <Option name='group-red' value='red' color='danger'>Red</Option>
       </Choice>
       <Choice label='Block Buttons:' multiple button block validate={validateRequired}>
-        <option name='block-blue' value='blue' color='info' className='mx-1' disabled>Blue</option>
-        <option name='block-green' value='green' color='info' className='mx-1'>Green</option>
-        <option name='block-red' value='red' color='danger' className='mx-1'>Red</option>
+        <Option name='block-blue' value='blue' color='info' className='mx-1' disabled>Blue</Option>
+        <Option name='block-green' value='green' color='info' className='mx-1'>Green</Option>
+        <Option name='block-red' value='red' color='danger' className='mx-1'>Red</Option>
       </Choice>
     </>
   ))

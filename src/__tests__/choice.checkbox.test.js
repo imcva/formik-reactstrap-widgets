@@ -232,3 +232,22 @@ test('Radio Validation', async () => {
     expect(invalidText.length).toBe(3)
   })
 })
+
+test('Basic Radio With Children', async () => {
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: 'green'
+      }}
+      onSubmit={() => null}
+    >
+      <Choice multiple label='Color: ' inputProps={{alt: 'Test Alt'}}>
+        <Option name='red' value={true}>Red</Option>
+        <Option name='blue' value={true}>Blue</Option>
+        <Option name='green' value={true}>Green</Option>
+      </Choice>
+    </FormWrapper>
+  )
+  const blue = getByTestId('blue-true')
+  expect(blue).toHaveAttribute('alt', 'Test Alt')
+})

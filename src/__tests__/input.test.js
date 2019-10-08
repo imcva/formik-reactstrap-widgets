@@ -96,3 +96,18 @@ test('Input Level Validation', async () => {
     expect(invalidText).toBeVisible()
   })
 })
+
+test('InputProps', async () => {
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        email: 'test'
+      }}
+      onSubmit={(v, f) => null}
+    >
+      <Input name='email' inputProps={{alt: 'Test ALT'}} validate={validateEmail} />
+    </FormWrapper>
+  )
+  const input = getByTestId('field-input')
+  expect(input).toHaveAttribute('alt', 'Test ALT')
+})

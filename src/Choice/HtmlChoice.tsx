@@ -13,7 +13,8 @@ interface HtmlChoiceProps extends FieldProps, InputProps {
   name?: string
   multiple?: boolean
   value: any
-  form: any
+  form: any,
+  inputProps?: Object
 }
 
 const HtmlChoice: React.FC<HtmlChoiceProps> = (props) => {
@@ -49,6 +50,7 @@ const HtmlChoice: React.FC<HtmlChoiceProps> = (props) => {
               type={props.multiple ? 'checkbox' : 'radio' }
               valid={props.valid}
               value={value}
+              {...props.inputProps}
             />
             {props.children}
           </Label>

@@ -20,7 +20,11 @@ const formatValue = (value: string) => {
   return undefined
 }
 
-const DatePickerInput: React.FC<InputProps> = (props, ref) => {
+interface DatePickerInput extends InputProps {
+  inputProps?: Object
+}
+
+const DatePickerInput: React.FC<DatePickerInput> = (props, ref) => {
   return ( 
     <InputGroup>
       <Input {...props} innerRef={ref} />
@@ -35,7 +39,7 @@ const DatePickerInput: React.FC<InputProps> = (props, ref) => {
 
 const DatePickerInputWithRef = React.forwardRef(DatePickerInput)
 
-type DatePickerProps = Partial<ReactDatePickerProps> & Omit<FieldGroupProps, 'render'> & InputProps
+type DatePickerProps = Partial<ReactDatePickerProps> & Omit<FieldGroupProps, 'render'> & DatePickerInput
 
 const DatePicker: React.FC<DatePickerProps> = (props) => (
   <FieldGroup
@@ -70,6 +74,7 @@ const DatePicker: React.FC<DatePickerProps> = (props) => (
               addon={props.addon}
               className={props.className}
               cssModule={props.cssModule}
+              {...props.inputProps}
             />
          }
         />

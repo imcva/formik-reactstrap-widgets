@@ -105,3 +105,18 @@ test('Input Level Validation', async () => {
     expect(invalidText).toBeVisible()
   })
 })
+
+test('Input Props', async () => {
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        birthday: '12/09/2019'
+      }}
+      onSubmit={(v, f) => null}
+    >
+      <DatePicker name='birthday' validate={validateBetweenDates} inputProps={{ alt: 'Test Alt' }} />
+    </FormWrapper>
+  )
+  const input = getByTestId('field-input')
+  expect(input).toHaveAttribute('alt', 'Test Alt')
+})

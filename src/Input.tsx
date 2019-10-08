@@ -2,7 +2,9 @@ import React from 'react'
 import { Input as StrapInput, InputProps as StrapInputProps } from 'reactstrap'
 import FieldGroup, { FieldGroupProps, FieldGroupRenderProps } from './FieldGroup';
 
-type InputProps = StrapInputProps & FieldGroupProps
+interface InputProps extends StrapInputProps, FieldGroupProps {
+  inputProps: Object
+}
 
 const Input: React.FC<InputProps> = (props) => { 
   return (
@@ -26,6 +28,7 @@ const Input: React.FC<InputProps> = (props) => {
           addon={props.addon}
           className={props.className}
           cssModule={props.cssModule}
+          {...props.inputProps}
         />
       )}
     />

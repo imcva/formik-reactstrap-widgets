@@ -236,3 +236,22 @@ test('Radio Validation', async () => {
     expect(onSubmit).toHaveBeenCalledWith({ bool: true }, expect.any(Object))
   })
 })
+
+test('Basic Radio With Children', async () => {
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: 'green'
+      }}
+      onSubmit={() => null}
+    >
+      <Choice name='color' label='Color: ' inputProps={{alt: 'Test Alt'}}>
+        <Option value='red'>Red</Option>
+        <Option value='blue'>Blue</Option>
+        <Option value='green'>Green</Option>
+      </Choice>
+    </FormWrapper>
+  )
+  const blue = getByTestId('color-blue')
+  expect(blue).toHaveAttribute('alt', 'Test Alt')
+})

@@ -160,3 +160,24 @@ test('Render empty options', async () => {
     expect(input.value).toBe('')
   })
 })
+
+test('Input Props', async () => {
+  const onSubmit = jest.fn()
+  const options = [
+    {value: 'red', text: 'Red'},
+    {value: 'blue', text: 'Blue'},
+    {value: 'green', text: 'Green'}
+  ]
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: ''
+      }}
+      onSubmit={onSubmit}
+    >
+      <Select name='color' options={options} inputProps={{ alt: 'Test Alt' }} />
+    </FormWrapper>
+  )
+  const input = getByTestId('field-input')
+  expect(input).toHaveAttribute('alt', 'Test Alt')
+})

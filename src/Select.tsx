@@ -76,7 +76,9 @@ const checkOptionAvailable = (value: string, options: OptionsArray, children: Re
   }
 }
 
-type SelectProps = Omit<FieldGroupProps, 'render'> & InputProps
+interface SelectProps extends Omit<FieldGroupProps, 'render'>, InputProps {
+  inputProps: Object
+}
 
 const Select: React.FC<SelectProps> = (props) => {
   return (
@@ -115,6 +117,7 @@ const Select: React.FC<SelectProps> = (props) => {
             addon={props.addon}
             className={props.className}
             cssModule={props.cssModule}
+            {...props.inputProps}
           >
             <Options
               options={props.options}

@@ -34,6 +34,7 @@ const ChoiceChildren: React.FC<ChoiceChildrenProps> = (props) => {
         block={props.block}
       >
         {props.options.map((opt, index) => {
+          const inputProps = Object.assign({}, props.inputProps, opt.inputProps)
           return (
             <Component 
               name={props.name}
@@ -41,6 +42,7 @@ const ChoiceChildren: React.FC<ChoiceChildrenProps> = (props) => {
               {...props.fieldProps.formik}
               {...props}
               {...opt}
+              inputProps={inputProps}
               key={index}
             >
               {opt.text}
