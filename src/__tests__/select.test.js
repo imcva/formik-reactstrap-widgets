@@ -62,6 +62,43 @@ test('Basic Select With Children', async () => {
   })
 })
 
+test('Test First Value and Options Reset', async () => {
+  const onSubmit = jest.fn()
+  const options1 = [
+    {value: 'red', text: 'Red'},
+    {value: 'yellow', text: 'Yellow'},
+    {value: 'blue', text: 'Blue'},
+  ]
+  const options2 = [
+    {value: 'orange', text: 'Orange', primary: 'red'},
+    {value: 'purple', text: 'Purple', primary: 'blue'},
+    {value: 'green', text: 'Green', primary: 'yellow'}
+  ]
+  const { debug, getByTestId } = render(
+    <Formik 
+      onSubmit={onSubmit}
+      render={props => {
+        return (
+          <Form data-testid='form'>
+            <Select name='primary' options={options1} inputProps={{'data-testid': 'primary-input'}} />
+            <Select name='secondary' options={options2} filtered={options2.filter(opt => opt.primary === props.values.primary)} inputProps={{'data-testid': 'secondary-input'}} />
+          </Form>
+        )
+      }}
+    />
+  )
+  const form = getByTestId('form')
+  const primary = getByTestId('primary-input')
+  const secondary = getByTestId('secondary-input')
+  expect(primary.value).toBe('red')
+  expect(secondary.value).toBe('orange')
+  fireEvent.submit(form)
+  await wait(() => {
+    expect(onSubmit).toHaveBeenCalledTimes(1)
+    expect(onSubmit).toHaveBeenCalledWith({ primary: 'red', secondary: 'orange' }, expect.any(Object))
+  })
+})
+
 test('Basic Select With Options Prop', async () => {
   const onSubmit = jest.fn()
   const options = [

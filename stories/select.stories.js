@@ -22,6 +22,18 @@ const options = [
   { value: 'green', text: 'Green' }
 ] 
 
+const options1 = [
+  {value: 'red', text: 'Red'},
+  {value: 'yellow', text: 'Yellow'},
+  {value: 'blue', text: 'Blue'},
+]
+const options2 = [
+  {value: '', text: ''},
+  {value: 'orange', text: 'Orange', primary: 'red'},
+  {value: 'purple', text: 'Purple', primary: 'blue'},
+  {value: 'green', text: 'Green', primary: 'yellow'}
+]
+
 storiesOf('Select Input', module)
   .addDecorator(storyFn => (
     <Container fluid>
@@ -29,11 +41,11 @@ storiesOf('Select Input', module)
         <Col sm={4} className='my-2'>
           <Formik
             onSubmit={action('form-submitted')}
-            initialValues={{color: 'blue'}}
+            initialValues={{color: 'blue', primary: 'blue'}}
             render={(props) => {
               return (
                 <Form>
-                  {storyFn()}
+                  {storyFn(props)}
                   <Button>Submit</Button>
                 </Form>
               )
@@ -67,4 +79,9 @@ storiesOf('Select Input', module)
       name='color'
       label='Select A Color: '
     />
+  )).add('Cascading Dropdown', (props) => (
+    <>
+      <Select name='primary' options={options1} />
+      <Select name='secondary' options={options2} filtered={options2.filter(opt => opt.primary === props.values.primary)} />
+    </>
   ))

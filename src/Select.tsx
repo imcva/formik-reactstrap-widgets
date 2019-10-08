@@ -1,13 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState } from 'react'
 import { Input, InputProps } from 'reactstrap'
-import FieldGroup, { FieldGroupProps, FieldGroupRenderProps } from './FieldGroup';
+import FieldGroup, { FieldGroupProps, FieldGroupRenderProps } from './FieldGroup'
+//@ts-ignore
+import isEqual from 'lodash/isEqual'
+
+import { convertOptionsFromChildren } from './Choice/helpers'
 
 interface IOption {
   value: string,
   text: string
   [key: string]: any
 }
-type OptionsArray = Array<IOption>
+type OptionsArray = Array<IOption> | undefined
 
 interface OptionsProps {
   options: OptionsArray,
@@ -15,19 +19,9 @@ interface OptionsProps {
 }
 
 const Options: React.FC<OptionsProps> = (props) => {
-  const { options, children, insertOption } = props
-  if (children) {
-    return (
-      <>
-        {children}
-        {insertOption
-          ? <option value={insertOption} disabled>{insertOption}</option>
-          : null
-        }
-      </>
-    ) 
-  } else if (Array.isArray(options) && options.length) {
-    const opts = props.options.map((opt, index) => {
+  const { options, insertOption } = props
+  if (Array.isArray(options) && options.length) {
+    const opts = options.map((opt, index) => {
       return (<option {...opt} key={index}>{opt.text}</option>)
     })
     return (
@@ -39,36 +33,15 @@ const Options: React.FC<OptionsProps> = (props) => {
         }
       </>
     ) 
+  } else if (insertOption) {
+    return (<option value={insertOption} disabled>{insertOption}</option>)
   } else {
     return null
   }
 }
 
-const getFirstOptionValue = (options: Array<{value: string}>, children: React.Component | JSX.Element | React.ReactNode) => {
-  if (children) {
-    const child = React.Children.toArray(children)[0]
-    if (child && React.isValidElement(child)) {
-      return child.props.value
-    }
-    return ''
-  } else if (Array.isArray(options) && options.length) {
-    const option = options[0]
-    return option.value
-  } else {
-    return ''
-  }
-}
-
-const checkOptionAvailable = (value: string, options: OptionsArray, children: React.ReactNode) => {
-  if (children) {
-    const child = React.Children.toArray(children).find(c => {
-      if(c && React.isValidElement(c)) {
-        return c.props.value == value
-      } 
-      return false
-    })
-    return !!child
-  } else if (options) {
+const checkOptionAvailable = (value: string, options: OptionsArray) => {
+  if (options) {
     const option = options.find(o => o.value === value)
     return !!option
   } else {
@@ -77,10 +50,25 @@ const checkOptionAvailable = (value: string, options: OptionsArray, children: Re
 }
 
 interface SelectProps extends Omit<FieldGroupProps, 'render'>, InputProps {
+  filtered?: IOption[]
   inputProps: Object
 }
 
+
+// const filter = (opts: IOption[], key: string | undefined, value: any) => {
+//   let results = opts
+//   if (key) {
+//     results = opts.filter(opt => opt[key] === value) 
+//   }
+//   console.log({ opts, key, value, results }, 'Filter params')
+//   return results
+// }
+
 const Select: React.FC<SelectProps> = (props) => {
+  const { options, } = props
+  const baseOptions = convertOptionsFromChildren<IOption>(options, props.children)
+  const filteredOptions = props.filtered || baseOptions
+
   return (
     <FieldGroup 
       name={props.name}
@@ -89,15 +77,25 @@ const Select: React.FC<SelectProps> = (props) => {
       render={(fieldProps: FieldGroupRenderProps) => { 
         const [ insertOption , setInsertOption ] = useState()
         const { formik } = fieldProps
+        const { field } = formik
+
+        const filteredOptionsRef = useRef<IOption[] | undefined>(undefined)
         useEffect(() => {
-          if (formik.field.value === undefined) {
-            const firstOptionValue = getFirstOptionValue(props.options, props.children)
-            fieldProps.formik.form.setFieldValue(formik.field.name, firstOptionValue)
-          } else {
-            const optionExists = checkOptionAvailable(formik.field.value, props.options, props.children)
-            if (!optionExists) {
-              setInsertOption(props.value) 
+          if(!isEqual(filteredOptions, filteredOptionsRef.current)) {
+            filteredOptionsRef.current = filteredOptions
+            const filteredCheck = checkOptionAvailable(field.value, filteredOptions)
+            const baseCheck = field.value === undefined || checkOptionAvailable(field.value, baseOptions)
+            if (Array.isArray(filteredOptions) && filteredOptions.length && !filteredCheck && baseCheck) {
+              const first = filteredOptions[0].value
+              formik.form.setFieldValue(formik.field.name, first)
             }
+          }
+        })
+
+        useEffect(() => {
+          const baseCheck = checkOptionAvailable(field.value, baseOptions)
+          if (field.value !== undefined && !baseCheck) {
+            setInsertOption(field.value)
           }
         }, [])
 
@@ -120,8 +118,7 @@ const Select: React.FC<SelectProps> = (props) => {
             {...props.inputProps}
           >
             <Options
-              options={props.options}
-              children={props.children}
+              options={filteredOptions}
               insertOption={insertOption}
             />
           </Input>
