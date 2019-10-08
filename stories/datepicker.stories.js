@@ -71,6 +71,7 @@ storiesOf('DatePicker Input', module)
     />
   ))
   .add('Disabled', () => <DatePicker disabled name='testInput' label='Test Input' />)
+  .add('Plaintext', () => <DatePicker plaintext name='testInput' label='Test Input' />)
   .add('Input Level Validation', () => (
     <DatePicker 
       name='testInput'

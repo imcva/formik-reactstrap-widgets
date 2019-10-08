@@ -28,11 +28,15 @@ const DatePickerInput: React.FC<DatePickerInput> = (props, ref) => {
   return ( 
     <InputGroup>
       <Input {...props} innerRef={ref} />
-      <InputGroupAddon addonType="append">
-        <Button className='border' color='light' onClick={props.onClick}>
-          <FontAwesomeIcon icon={faCalendarAlt} />
-        </Button>
-      </InputGroupAddon>
+      {!props.plaintext
+        ? (
+          <InputGroupAddon addonType="append">
+            <Button className='border' color='light' onClick={props.onClick}>
+              <FontAwesomeIcon icon={faCalendarAlt} />
+            </Button>
+          </InputGroupAddon>
+        ) : null
+      }
     </InputGroup>
   )
 }
@@ -51,7 +55,7 @@ const DatePicker: React.FC<DatePickerProps> = (props) => (
         <ReactDatePicker
           todayButton='Today'
           {...fieldProps.formik.field}
-          disabled={props.disabled}
+          disabled={props.disabled || props.plaintext}
           value={undefined}
           selected={formatValue(fieldProps.formik.field.value)}
           onChange={(date) => {
