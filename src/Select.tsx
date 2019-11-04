@@ -51,7 +51,7 @@ const checkOptionAvailable = (value: string, options: OptionsArray) => {
 
 interface SelectProps extends Omit<FieldGroupProps, 'render'>, InputProps {
   filtered?: IOption[]
-  inputProps: Object
+  inputProps?: Object
 }
 
 

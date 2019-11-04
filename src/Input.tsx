@@ -3,7 +3,7 @@ import { Input as StrapInput, InputProps as StrapInputProps } from 'reactstrap'
 import FieldGroup, { FieldGroupProps, FieldGroupRenderProps } from './FieldGroup';
 
 interface InputProps extends StrapInputProps, FieldGroupProps {
-  inputProps: Object
+  inputProps?: Object
 }
 
 const Input: React.FC<InputProps> = (props) => { 
