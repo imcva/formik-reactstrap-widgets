@@ -86,7 +86,7 @@ test('Disabled Input', async () => {
 }
 )
 test('Plaintext Input', async () => {
-  const { debug, getByTestId } = render(
+  const { getByTestId } = render(
     <FormWrapper 
       initialValues={{
         birthday: '12/09/2019'
@@ -98,7 +98,7 @@ test('Plaintext Input', async () => {
   )
   const input = getByTestId('field-input')
   expect(input).toHaveClass('form-control-plaintext')
-  expect(input).toBeDisabled()
+  expect(input).toHaveAttribute('readonly')
 })
 
 test('Input Level Validation', async () => {

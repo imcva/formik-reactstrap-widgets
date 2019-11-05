@@ -55,7 +55,8 @@ const DatePicker: React.FC<DatePickerProps> = (props) => (
         <ReactDatePicker
           todayButton='Today'
           {...fieldProps.formik.field}
-          disabled={props.disabled || props.plaintext}
+          disabled={props.disabled}
+          readOnly={props.plaintext}
           value={undefined}
           selected={formatValue(fieldProps.formik.field.value)}
           onChange={(date) => {
@@ -67,7 +68,6 @@ const DatePicker: React.FC<DatePickerProps> = (props) => (
           customInput={
             <DatePickerInputWithRef
               data-testid={fieldProps['data-testid']}
-              disabled={props.disabled}
               type={props.type}
               size={props.size}
               bsSize={props.bsSize}

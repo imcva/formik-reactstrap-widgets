@@ -165,7 +165,7 @@ test('Plaintext Input', async () => {
   )
   const input = getByTestId('field-input')
   expect(input).toHaveClass('form-control-plaintext')
-  expect(input).toBeDisabled()
+  expect(input).toHaveAttribute('readonly')
 })
 
 test('Input Level Validation', async () => {

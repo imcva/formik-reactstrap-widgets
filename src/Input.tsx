@@ -16,7 +16,8 @@ const Input: React.FC<InputProps> = (props) => {
         <StrapInput
           {...fieldProps.formik.field}
           data-testid={fieldProps['data-testid']}
-          disabled={props.disabled || props.plaintext}
+          disabled={props.disabled}
+          readOnly={props.plaintext}
           type={props.type}
           size={props.size}
           bsSize={props.bsSize}

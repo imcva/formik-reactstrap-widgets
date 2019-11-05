@@ -103,7 +103,8 @@ const Select: React.FC<SelectProps> = (props) => {
           <Input
             {...formik.field}
             data-testid={fieldProps['data-testid']}
-            disabled={props.disabled || props.plaintext}
+            disabled={props.disabled}
+            readOnly={props.plaintext}
             type='select'
             size={props.size}
             bsSize={props.bsSize}
