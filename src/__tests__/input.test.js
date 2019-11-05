@@ -62,7 +62,7 @@ test('Basic Input onSubmit', async () => {
 })
 
 test('Disabled Input', async () => {
-  const { debug, getByTestId } = render(
+  const { getByTestId } = render(
     <FormWrapper 
       initialValues={{
         email: 'test'
@@ -77,7 +77,7 @@ test('Disabled Input', async () => {
 })
 
 test('Plaintext Input', async () => {
-  const { debug, getByTestId } = render(
+  const { getByTestId } = render(
     <FormWrapper 
       initialValues={{
         email: 'test'
@@ -87,7 +87,6 @@ test('Plaintext Input', async () => {
       <Input name='email' plaintext />
     </FormWrapper>
   )
-  debug()
   const input = getByTestId('field-input')
   expect(input).toHaveClass('form-control-plaintext')
   expect(input).toHaveAttribute('readonly')

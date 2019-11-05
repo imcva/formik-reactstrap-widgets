@@ -71,7 +71,7 @@ test('Basic Input onSubmit', async () => {
 })
 
 test('Disabled Input', async () => {
-  const { debug, getByTestId } = render(
+  const { getByTestId } = render(
     <FormWrapper 
       initialValues={{
         birthday: '12/09/2019'

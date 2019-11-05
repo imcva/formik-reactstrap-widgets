@@ -74,7 +74,7 @@ test('Test First Value and Options Reset', async () => {
     {value: 'purple', text: 'Purple', primary: 'blue'},
     {value: 'green', text: 'Green', primary: 'yellow'}
   ]
-  const { debug, getByTestId } = render(
+  const { getByTestId } = render(
     <Formik 
       onSubmit={onSubmit}
       render={props => {

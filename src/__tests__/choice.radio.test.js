@@ -34,7 +34,7 @@ const FormWrapper = (props) => (
 test('Basic Radio With Children', async () => {
   const onSubmit = jest.fn()
   const labelText = 'Color: '
-  const { debug, getByTestId, getByLabelText } = render(
+  const { getByTestId, getByLabelText } = render(
     <FormWrapper 
       initialValues={{
         color: 'green'
