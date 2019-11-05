@@ -84,4 +84,11 @@ storiesOf('Select Input', module)
       <Select name='primary' options={options1} />
       <Select name='secondary' options={options2} filtered={options2.filter(opt => opt.primary === props.values.primary)} />
     </>
+  )).add('Plaintext Dropdown', (props) => (
+    <Select
+      options={options}
+      name='color'
+      label='Select A Color: '
+      plaintext
+    />
   ))

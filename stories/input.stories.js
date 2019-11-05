@@ -41,6 +41,7 @@ storiesOf('Text Input', module)
   ))
   .add('Basic', () => <Input name='testInput' label='Test Input' />)
   .add('Disabled', () => <Input disabled name='testInput' label='Test Input' />)
+  .add('Plaintext Input', () => <Input name='testInput' plaintext label='Password:' />)
   .add('Password Type Input', () => <Input name='testInput' type='password' label='Password:' />)
   .add('Input Level Validation', () => (
     <Input 

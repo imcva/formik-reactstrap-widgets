@@ -31,6 +31,37 @@ storiesOf('Checkbox Input', module)
         <Col sm={4} className='my-2'>
           <Formik
             onSubmit={action('form-submitted')}
+            initialValues={{
+              plaintextBasicCheckbox: {
+                1: {
+                  blue: true,
+                  red: true,
+                  gree: false
+                },
+                2: {
+                  blue: true,
+                  red: true,
+                  gree: false
+                }
+              },
+              plaintextButtonCheckbox: {
+                1: {
+                  blue: true,
+                  red: true,
+                  gree: false
+                },
+                2: {
+                  blue: true,
+                  red: true,
+                  gree: false
+                },
+                3: {
+                  blue: true,
+                  red: true,
+                  gree: false
+                }
+              }
+            }}
             render={(props) => {
               return (
                 <Form>
@@ -60,6 +91,39 @@ storiesOf('Checkbox Input', module)
         <option name='singleDisabled-blue' value='blue' color='info' disabled>Blue</option>
         <option name='singleDisabled-green' value='green' color='info' validate={validateRequired}>Green</option>
         <option name='singleDisabled-red' value='red' color='danger' validate={validateRequired}>Red</option>
+      </Choice>
+    </>
+  ))
+  .add('Plaintext Basic Checkbox', () => (
+    <>
+      <Choice label='Select Your Favorite Colors (Required):' multiple plaintext>
+        <option name='plaintextBasicCheckbox.1.blue' value='blue' color='info'>Blue</option>
+        <option name='plaintextBasicCheckbox.1.green' value='green' color='info'>Green</option>
+        <option name='plaintextBasicCheckbox.1.red' value='red' color='danger'>Red</option>
+      </Choice>
+      <Choice label='Select Your Favorite Colors (Required):' multiple plaintext>
+        <option name='plaintextBasicCheckbox.2.blue' value='blue' color='info'>Blue</option>
+        <option name='plaintextBasicCheckbox.2.green' value='green' color='info'>Green</option>
+        <option name='plaintextBasicCheckbox.2.red' value='red' color='danger'>Red</option>
+      </Choice>
+    </>
+  ))
+  .add('Plaintext Button Checkbox', () => (
+    <>
+      <Choice label='Regular Buttons:' multiple plaintext button>
+        <option name='plaintextButtonCheckbox.1.blue' value='blue' color='info' className='mx-1'>Blue</option>
+        <option name='plaintextButtonCheckbox.1.green' value='green' color='info' className='mx-1'>Green</option>
+        <option name='plaintextButtonCheckbox.1.red' value='red' color='danger' className='mx-1'>Red</option>
+      </Choice>
+      <Choice label='Group Buttons:' multiple plaintext button group>
+        <option name='plaintextButtonCheckbox.2.blue' value='blue' color='info'>Blue</option>
+        <option name='plaintextButtonCheckbox.2.green' value='green' color='info'>Green</option>
+        <option name='plaintextButtonCheckbox.2.red' value='red' color='danger'>Red</option>
+      </Choice>
+      <Choice label='Block Buttons:' multiple plaintext button block>
+        <option name='plaintextButtonCheckbox.3.blue' value='blue' color='info' className='mx-1'>Blue</option>
+        <option name='plaintextButtonCheckbox.3.green' value='green' color='info' className='mx-1'>Green</option>
+        <option name='plaintextButtonCheckbox.3.red' value='red' color='danger' className='mx-1'>Red</option>
       </Choice>
     </>
   ))

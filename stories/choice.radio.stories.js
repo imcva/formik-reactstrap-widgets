@@ -34,6 +34,15 @@ storiesOf('Radio Input', module)
             initialValues={{
               basicRadio: '',
               basicRadioAllDisabled: '',
+              plaintextBasicRadios: {
+                1: 'red',
+                2: 'red'
+              },
+              plaintextButtonRadios: {
+                1: 'blue',
+                2: 'blue',
+                3: 'blue'
+              },
               basicRadioSingleDisabled: '',
               regularButtons: '',
               groupButtons: '',
@@ -68,13 +77,42 @@ storiesOf('Radio Input', module)
       </Choice>
     </>
   ))
+  .add('Plaintext Basic Radio', () => (
+    <>
+      <Choice name='plaintextBasicRadios.1' label='Select a Color (Required):' value='red' plaintext>
+        <option value='blue' color='info'>Blue</option>
+        <option value='red' color='danger'>Red</option>
+      </Choice>
+      <Choice name='plaintextBasicRadios.2' value='blue' label='Select a Color (Required):'>
+        <option value='red' color='danger'>Red</option>
+        <option value='blue' color='info' plaintext>Blue</option>
+      </Choice>
+    </>
+  ))
+  .add('Plaintext Button Radio', () => (
+    <>
+      <Choice name='plaintextButtonRadios.1' label='Select a Color (Required):' value='red' plaintext button>
+        <option value='blue' color='info' className='mx-1'>Blue</option>
+        <option value='red' color='danger' className='mx-1'>Red</option>
+      </Choice>
+      <Choice name='plaintextButtonRadios.2' value='blue' label='Select a Color (Required):' plaintext button group>
+        <option value='red' color='danger'>Red</option>
+        <option value='blue' color='info'>Blue</option>
+      </Choice>
+      <Choice name='plaintextButtonRadios.3' value='blue' label='Select a Color (Required):' plaintext button block>
+        <option value='red' color='danger'>Red</option>
+        <option value='blue' color='info'>Blue</option>
+
+      </Choice>
+    </>
+  ))
   .add('Buttons w/ Validation', () => (
     <>
       <Choice label='Regular Buttons:' button>
         <option value='blue' color='info' className='mx-1'>Blue</option>
         <option value='red' color='danger' className='mx-1'>Red</option>
       </Choice>
-      <Choice name='groupButtons' label='Group Buttons:' button group validate={validateRequired}>
+      <Choice name='groupButtons' label='Group Buttons:' outline button group validate={validateRequired}>
         <option value='blue' color='info'>Blue</option>
         <option value='red' color='danger'>Red</option>
       </Choice>
