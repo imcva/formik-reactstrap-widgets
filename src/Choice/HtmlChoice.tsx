@@ -44,7 +44,6 @@ const HtmlChoice: React.FC<HtmlChoiceProps> = (props) => {
               onChange={(event) => {
                 setValue(name, value, props.multiple, formik)
               }}
-              plaintext={props.plaintext}
               size={props.size}
               tag={props.tag}
               type={props.multiple ? 'checkbox' : 'radio' }

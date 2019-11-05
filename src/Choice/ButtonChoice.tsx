@@ -24,33 +24,36 @@ const ButtonChoice: React.FC<ButtonChoiceProps> = (props) => {
     <Field
       name={name}
       validate={props.validate}
-      render={(formik: FieldProps) => ( 
-        <Button
-          active={getActive(name, value, formik)}
-          area-label={props['area-label']}
-          block={!props.group && props.block}
-          className={className(
-            'my-2',
-            'text-center',
-            props.className
-          )}
-          color={props.color}
-          data-testid={id}
-          disabled={props.disabled || props.plaintext}
-          name={name}
-          innerRef={props.innerRef}
-          onBlur={formik.field.onBlur}
-          onClick={(event) => {
-            setValue(name, value, props.multiple, formik)
-          }}
-          outline={props.outline}
-          size={props.size}
-          tag={props.tag}
-          {...props.inputProps}
-        >
-          {props.children}
-        </Button>
-      )}
+      render={(formik: FieldProps) => { 
+        const active = getActive(name, value, formik)
+        return (
+          <Button
+            active={active}
+            area-label={props['area-label']}
+            block={!props.group && props.block}
+            className={className(
+              'my-2',
+              'text-center',
+              props.className
+            )}
+            color={props.color}
+            data-testid={id}
+            disabled={props.disabled || props.plaintext}
+            name={name}
+            innerRef={props.innerRef}
+            onBlur={formik.field.onBlur}
+            onClick={(event) => {
+              setValue(name, value, props.multiple, formik)
+            }}
+            outline={props.plaintext ? !active : props.outline}
+            size={props.size}
+            tag={props.tag}
+            {...props.inputProps}
+          >
+            {props.children}
+          </Button>
+        )
+  }}
     />
   )
 }
