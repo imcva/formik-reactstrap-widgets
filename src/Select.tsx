@@ -103,7 +103,7 @@ const Select: React.FC<SelectProps> = (props) => {
           <Input
             {...formik.field}
             data-testid={fieldProps['data-testid']}
-            disabled={props.disabled}
+            disabled={props.disabled || props.plaintext}
             type='select'
             size={props.size}
             bsSize={props.bsSize}
@@ -117,10 +117,14 @@ const Select: React.FC<SelectProps> = (props) => {
             cssModule={props.cssModule}
             {...props.inputProps}
           >
-            <Options
-              options={filteredOptions}
-              insertOption={insertOption}
-            />
+            {!props.plaintext
+              ? (
+                <Options
+                  options={filteredOptions}
+                  insertOption={insertOption}
+                />
+              ) : null
+            }
           </Input>
         )
       }}

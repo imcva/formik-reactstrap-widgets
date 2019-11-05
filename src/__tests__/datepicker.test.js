@@ -83,6 +83,22 @@ test('Disabled Input', async () => {
   )
   const input = getByTestId('field-input')
   expect(input).toBeDisabled()
+}
+)
+test('Plaintext Input', async () => {
+  const { debug, getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        birthday: '12/09/2019'
+      }}
+      onSubmit={(v, f) => null}
+    >
+      <DatePicker name='birthday' plaintext />
+    </FormWrapper>
+  )
+  const input = getByTestId('field-input')
+  expect(input).toHaveClass('form-control-plaintext')
+  expect(input).toBeDisabled()
 })
 
 test('Input Level Validation', async () => {

@@ -146,6 +146,26 @@ test('Disabled Input', async () => {
   )
   const input = getByTestId('field-input')
   expect(input).toBeDisabled()
+}
+)
+test('Plaintext Input', async () => {
+  const options = [
+    {value: 'red', text: 'Red'},
+    {value: 'blue', text: 'Blue'},
+    {value: 'green', text: 'Green'}
+  ]
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: 'green'
+      }}
+    >
+      <Select plaintext name='color' options={options} />
+    </FormWrapper>
+  )
+  const input = getByTestId('field-input')
+  expect(input).toHaveClass('form-control-plaintext')
+  expect(input).toBeDisabled()
 })
 
 test('Input Level Validation', async () => {

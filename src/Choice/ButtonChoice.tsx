@@ -36,7 +36,7 @@ const ButtonChoice: React.FC<ButtonChoiceProps> = (props) => {
           )}
           color={props.color}
           data-testid={id}
-          disabled={props.disabled}
+          disabled={props.disabled || props.plaintext}
           name={name}
           innerRef={props.innerRef}
           onBlur={formik.field.onBlur}

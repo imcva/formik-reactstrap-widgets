@@ -177,10 +177,64 @@ test('All Disabled Radios', async () => {
   expect(blue).toBeDisabled()
 })
 
+test('All Plaintext Radios', async () => {
+  const onSubmit = jest.fn()
+  const options = [
+    {value: 'red', text: 'Red', name: 'color.red'},
+    {value: 'blue', text: 'Blue', name: 'color.blue'},
+    {value: 'green', text: 'Green', name: 'color.green'}
+  ]
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: {
+          green: true
+        }
+      }}
+      onSubmit={onSubmit}
+    >
+      <Choice plaintext multiple options={options} />
+    </FormWrapper>
+  )
+  const red = getByTestId('color.red-true')
+  const green = getByTestId('color.green-true')
+  const blue = getByTestId('color.blue-true')
+  expect(red).toBeDisabled()
+  expect(green).toBeDisabled()
+  expect(blue).toBeDisabled()
+})
+
 test('Single Disabled Radios', async () => {
   const onSubmit = jest.fn()
   const options = [
     {value: 'red', text: 'Red', name: 'color.red', disabled: true},
+    {value: 'blue', text: 'Blue', name: 'color.blue'},
+    {value: 'green', text: 'Green', name: 'color.green'}
+  ]
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: {
+          green: true
+        }
+      }}
+      onSubmit={onSubmit}
+    >
+      <Choice multiple options={options} />
+    </FormWrapper>
+  )
+  const red = getByTestId('color.red-true')
+  const green = getByTestId('color.green-true')
+  const blue = getByTestId('color.blue-true')
+  expect(red).toBeDisabled()
+  expect(blue).not.toBeDisabled()
+  expect(green).not.toBeDisabled()
+})
+
+test('Single Plaintext Radios', async () => {
+  const onSubmit = jest.fn()
+  const options = [
+    {value: 'red', text: 'Red', name: 'color.red', plaintext: true},
     {value: 'blue', text: 'Blue', name: 'color.blue'},
     {value: 'green', text: 'Green', name: 'color.green'}
   ]

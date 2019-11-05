@@ -35,7 +35,7 @@ const HtmlChoice: React.FC<HtmlChoiceProps> = (props) => {
               checked={getActive(name, value, formik)}
               className={props.className}
               data-testid={id}
-              disabled={props.disabled}
+              disabled={props.disabled || props.plaintext}
               id={id}
               innerRef={props.innerRef}
               invalid={props.invalid}

@@ -158,9 +158,55 @@ test('All Disabled Radios', async () => {
   expect(green).toBeDisabled()
 })
 
+test('All Plaintext Radios', async () => {
+  const options = [
+    {value: 'red', text: 'Red'},
+    {value: 'blue', text: 'Blue'},
+    {value: 'green', text: 'Green'}
+  ]
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: 'green'
+      }}
+    >
+      <Choice plaintext name='color' options={options} />
+    </FormWrapper>
+  )
+  const red = getByTestId('color-red')
+  const blue = getByTestId('color-blue')
+  const green = getByTestId('color-green')
+  expect(red).toBeDisabled()
+  expect(blue).toBeDisabled()
+  expect(green).toBeDisabled()
+})
+
 test('Single Disabled Radios', async () => {
   const options = [
     {value: 'red', text: 'Red', disabled: true},
+    {value: 'blue', text: 'Blue'},
+    {value: 'green', text: 'Green'}
+  ]
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: 'green'
+      }}
+    >
+      <Choice name='color' options={options} />
+    </FormWrapper>
+  )
+  const red = getByTestId('color-red')
+  const blue = getByTestId('color-blue')
+  const green = getByTestId('color-green')
+  expect(red).toBeDisabled()
+  expect(blue).not.toBeDisabled()
+  expect(green).not.toBeDisabled()
+})
+
+test('Single Plaintext Radios', async () => {
+  const options = [
+    {value: 'red', text: 'Red', plaintext: true},
     {value: 'blue', text: 'Blue'},
     {value: 'green', text: 'Green'}
   ]
