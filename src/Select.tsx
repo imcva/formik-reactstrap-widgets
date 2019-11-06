@@ -49,20 +49,18 @@ const checkOptionAvailable = (value: string, options: OptionsArray) => {
   }
 }
 
+const getSelectedText = (value: any, options: IOption[]) => {
+  const opt = options.find(o => o.value === value)
+  if (opt) {
+    return opt.text
+  }
+  return value
+}
+
 interface SelectProps extends Omit<FieldGroupProps, 'render'>, InputProps {
   filtered?: IOption[]
   inputProps?: Object
 }
-
-
-// const filter = (opts: IOption[], key: string | undefined, value: any) => {
-//   let results = opts
-//   if (key) {
-//     results = opts.filter(opt => opt[key] === value) 
-//   }
-//   console.log({ opts, key, value, results }, 'Filter params')
-//   return results
-// }
 
 const Select: React.FC<SelectProps> = (props) => {
   const { options, } = props
@@ -116,6 +114,7 @@ const Select: React.FC<SelectProps> = (props) => {
             addon={props.addon}
             className={props.className}
             cssModule={props.cssModule}
+            value={props.plaintext ? getSelectedText(formik.field.value, filteredOptions) : formik.field.value}
             {...props.inputProps}
           >
             {!props.plaintext
