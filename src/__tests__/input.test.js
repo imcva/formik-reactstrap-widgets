@@ -3,7 +3,8 @@ import {
   render,
   fireEvent,
   cleanup,
-  wait
+  wait,
+  getAllByTestId
 } from '@testing-library/react'
 import { Formik, Form } from 'formik'
 import 'jest-dom/extend-expect'
@@ -126,4 +127,36 @@ test('InputProps', async () => {
   )
   const input = getByTestId('field-input')
   expect(input).toHaveAttribute('alt', 'Test ALT')
+})
+
+test('Custom OnChange', async () => {
+  const onSubmit = jest.fn()
+  const { getByTestId, getAllByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        number: 1,
+        timesTwo: 2
+      }}
+      onSubmit={onSubmit}
+    >
+      <Input name='number' type='number' label='Number' onChange={(value, formikOnChange, formik) => { 
+        formik.form.setFieldValue('timesTwo', Number(value) * 2)
+        formikOnChange(Number(value))
+      }} />
+      <Input type='number' name='timesTwo' label='Times Two' />
+    </FormWrapper>
+  )
+  const form = getByTestId('form')
+  const [ number, timesTwo ] = getAllByTestId('field-input')
+  expect(number.value).toBe('1')
+  expect(timesTwo.value).toBe('2')
+  const newValue = 4
+  fireEvent.change(number, { target: { value: newValue } })
+  expect(number.value).toBe(String(newValue))
+  expect(timesTwo.value).toBe(String(Number(newValue) * 2))
+  fireEvent.submit(form)
+  await wait(() => {
+    expect(onSubmit).toHaveBeenCalledTimes(1)
+    expect(onSubmit).toHaveBeenCalledWith({ number: newValue, timesTwo: (newValue * 2) }, expect.any(Object))
+  })
 })

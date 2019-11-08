@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDatePicker, { ReactDatePickerProps  } from 'react-datepicker'
 import { Input, InputGroup, InputGroupAddon, Button, InputProps } from 'reactstrap'
+import { FieldProps } from 'formik'
 import FieldGroup, { FieldGroupRenderProps, FieldGroupProps } from './FieldGroup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarAlt } from '@fortawesome/free-regular-svg-icons'
@@ -20,11 +21,7 @@ const formatValue = (value: string) => {
   return undefined
 }
 
-interface DatePickerInput extends InputProps {
-  inputProps?: Object
-}
-
-const DatePickerInput: React.FC<DatePickerInput> = (props, ref) => {
+const DatePickerInput: React.FC<InputProps> = (props, ref) => {
   return ( 
     <InputGroup>
       <Input {...props} innerRef={ref} />
@@ -41,9 +38,20 @@ const DatePickerInput: React.FC<DatePickerInput> = (props, ref) => {
   )
 }
 
-const DatePickerInputWithRef = React.forwardRef(DatePickerInput)
+const DatePickerInputWithRef: React.FC<InputProps> = React.forwardRef(DatePickerInput)
 
-type DatePickerProps = Partial<ReactDatePickerProps> & Omit<FieldGroupProps, 'render'> & DatePickerInput
+interface DatePickerProps extends Partial<Omit<ReactDatePickerProps, 'onChange'>>, Omit<FieldGroupProps, 'render'>, Omit<InputProps, 'onChange'> {
+  onChange?: (date: Date | null, formikOnChange: (date: Date) => void, formik: FieldProps) => void
+  inputProps?: object
+}
+
+const formikUpdateDate = (name: string | undefined, formik: FieldProps) => {
+  return (date: Date | null) => {
+    if (name) {
+      formik.form.setFieldValue(name, date)
+    }
+  }
+}
 
 const DatePicker: React.FC<DatePickerProps> = (props) => (
   <FieldGroup
@@ -60,8 +68,11 @@ const DatePicker: React.FC<DatePickerProps> = (props) => (
           value={undefined}
           selected={formatValue(fieldProps.formik.field.value)}
           onChange={(date) => {
-            if (props.name) {
-              fieldProps.formik.form.setFieldValue(props.name, date)
+            const updateDate = formikUpdateDate(props.name, fieldProps.formik)
+            if (typeof props.onChange === 'function') {
+              props.onChange(date, updateDate, fieldProps.formik)
+            } else {
+              updateDate(date)
             }
           }}
           {...props.datePickerProps}

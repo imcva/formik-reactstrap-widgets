@@ -5,6 +5,7 @@ import { Formik, Form } from 'formik'
 import { Container, Row, Col, Button } from 'reactstrap'
 
 import Select from '../src/Select'
+import Input from '../src/Input'
 
 import 'bootstrap/dist/css/bootstrap.css'
 
@@ -91,4 +92,12 @@ storiesOf('Select Input', module)
       label='Select A Color: '
       plaintext
     />
+  )).add('Custom onChange Method', (props) => (
+    <>
+      <Select name='primary' label='Pick a Color' options={options1} onChange={(value, formikOnChange, formik) => {
+        formik.form.setFieldValue('test', `You selected: ${value}`)
+        formikOnChange(value)
+      }} />
+      <Input name='test' label='Color Choice' />
+    </>
   ))

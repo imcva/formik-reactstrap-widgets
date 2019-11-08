@@ -301,3 +301,69 @@ test('Basic Radio With Children', async () => {
   const blue = getByTestId('color-blue')
   expect(blue).toHaveAttribute('alt', 'Test Alt')
 })
+
+test('Custom global onChange with basic radio', async () => {
+  const changeFunction = jest.fn()
+  const { debug, getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: 'green'
+      }}
+      onSubmit={() => null}
+    >
+      <Choice name='color' label='Color: ' onChange={(value, formikOnChange) => {
+        changeFunction(value) 
+        formikOnChange(value)
+      }}>
+        <Option value='red' label='Red'>Red</Option>
+        <Option value='blue' label='Blue'>Blue</Option>
+        <Option value='green' label='Green'>Green</Option>
+      </Choice>
+    </FormWrapper>
+  )
+  const red = getByTestId('color-red')
+  const blue = getByTestId('color-blue')
+  const green = getByTestId('color-green')
+  expect(red.checked).not.toBeTruthy()
+  expect(blue.checked).not.toBeTruthy()
+  expect(green.checked).toBeTruthy()
+  fireEvent.click(blue)
+  expect(changeFunction).toHaveBeenCalledTimes(1)
+  expect(changeFunction).toHaveBeenCalledWith('blue')
+  expect(red.checked).not.toBeTruthy()
+  expect(blue.checked).toBeTruthy()
+  expect(green.checked).not.toBeTruthy()
+})
+
+test('Custom global onChange with button radio', async () => {
+  const changeFunction = jest.fn()
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: 'green'
+      }}
+      onSubmit={() => null}
+    >
+      <Choice button name='color' label='Color: ' onChange={(value, formikOnChange) => {
+        changeFunction(value) 
+        formikOnChange(value)
+      }}>
+        <Option value='red' label='Red'>Red</Option>
+        <Option value='blue' label='Blue'>Blue</Option>
+        <Option value='green' label='Green'>Green</Option>
+      </Choice>
+    </FormWrapper>
+  )
+  const red = getByTestId('color-red')
+  const blue = getByTestId('color-blue')
+  const green = getByTestId('color-green')
+  expect(red).not.toHaveClass('active')
+  expect(blue).not.toHaveClass('active')
+  expect(green).toHaveClass('active')
+  fireEvent.click(blue)
+  expect(changeFunction).toHaveBeenCalledTimes(1)
+  expect(changeFunction).toHaveBeenCalledWith('blue')
+  expect(red).not.toHaveClass('active')
+  expect(blue).toHaveClass('active')
+  expect(green).not.toHaveClass('active')
+})

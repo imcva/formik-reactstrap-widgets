@@ -6,13 +6,14 @@ import { Field, FieldProps }  from 'formik'
 // @ts-ignore
 import className from 'classname'
 
-import { getActive, setValue } from './helpers'
+import { getActive, getNewValue } from './helpers'
 
-interface ButtonChoiceProps extends FieldProps, ButtonProps {
+interface ButtonChoiceProps extends FieldProps, Omit<ButtonProps, 'onChange'> {
   children: string
   name?: string
   value: any
   form: any
+  onChange?: (value: any, formikOnChange: (value?: any) => void, formik: FieldProps) => void
   inputProps?: Object
 }
 
@@ -42,8 +43,18 @@ const ButtonChoice: React.FC<ButtonChoiceProps> = (props) => {
             name={name}
             innerRef={props.innerRef}
             onBlur={formik.field.onBlur}
-            onClick={(event) => {
-              setValue(name, value, props.multiple, formik)
+            onClick={(e) => {
+              const newValue = getNewValue(name, value, props.multiple, formik)
+              const formikOnChange = (val?: any) => {
+                if (name) {
+                  formik.form.setFieldValue(name, newValue)
+                }
+              }
+              if (typeof props.onChange === 'function') {
+                props.onChange(newValue, formikOnChange, formik)
+              } else {
+                formikOnChange(newValue)
+              }
             }}
             outline={props.plaintext ? !active : props.outline}
             size={props.size}

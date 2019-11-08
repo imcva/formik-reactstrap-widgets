@@ -6,14 +6,15 @@ import { Field, FieldProps }  from 'formik'
 // @ts-ignore
 import className from 'classname'
 
-import { getActive, setValue } from './helpers'
+import { getActive, getNewValue } from './helpers'
 
-interface HtmlChoiceProps extends FieldProps, InputProps {
+interface HtmlChoiceProps extends FieldProps, Omit<InputProps, 'onChange'> {
   children: string
   name?: string
   multiple?: boolean
   value: any
   form: any,
+  onChange?: (e: React.ChangeEvent<any>, formikOnChange: (value?: any) => void, formik: FieldProps) => void
   inputProps?: Object
 }
 
@@ -41,8 +42,18 @@ const HtmlChoice: React.FC<HtmlChoiceProps> = (props) => {
               invalid={props.invalid}
               name={name}
               onBlur={formik.field.onBlur}
-              onChange={(event) => {
-                setValue(name, value, props.multiple, formik)
+              onChange={(e) => {
+                const newValue = getNewValue(name, value, props.multiple, formik)
+                const formikOnChange = (val?: any) => {
+                  if (name) {
+                    formik.form.setFieldValue(name, newValue)
+                  }
+                }
+                if (typeof props.onChange === 'function') {
+                  props.onChange(newValue, formikOnChange, formik)
+                } else {
+                  formikOnChange(newValue)
+                }
               }}
               size={props.size}
               tag={props.tag}

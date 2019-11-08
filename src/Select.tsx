@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { Input, InputProps } from 'reactstrap'
 import FieldGroup, { FieldGroupProps, FieldGroupRenderProps } from './FieldGroup'
+import { FieldProps, FormikHandlers } from 'formik'
 //@ts-ignore
 import isEqual from 'lodash/isEqual'
 
@@ -57,7 +58,8 @@ const getSelectedText = (value: any, options: IOption[]) => {
   return value
 }
 
-interface SelectProps extends Omit<FieldGroupProps, 'render'>, InputProps {
+interface SelectProps extends Omit<FieldGroupProps, 'render'>, Omit<InputProps, 'onChange'> {
+  onChange?: (value: any, formikOnChange: FormikHandlers['handleChange'], formik: FieldProps) => void
   filtered?: IOption[]
   inputProps?: Object
 }
@@ -115,6 +117,19 @@ const Select: React.FC<SelectProps> = (props) => {
             className={props.className}
             cssModule={props.cssModule}
             value={props.plaintext ? getSelectedText(formik.field.value, filteredOptions) : formik.field.value}
+            onChange={(e) => {
+              const { value } = e.target
+              const formikOnChange = (value: any) => {
+                if (props.name) {
+                  fieldProps.formik.form.setFieldValue(props.name, value)
+                }
+              }
+              if (typeof props.onChange === 'function') {
+                props.onChange(value, formikOnChange, fieldProps.formik)
+              } else {
+                formikOnChange(value)
+              }
+            }}
             {...props.inputProps}
           >
             {!props.plaintext

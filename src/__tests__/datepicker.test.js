@@ -136,3 +136,40 @@ test('Input Props', async () => {
   const input = getByTestId('field-input')
   expect(input).toHaveAttribute('alt', 'Test Alt')
 })
+
+test('Custom onChange Method', async () => {
+  const onSubmit = jest.fn()
+  const { getByTestId, getAllByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        birthday: '',
+        nextBirthday: ''
+      }}
+      onSubmit={onSubmit}
+    >
+      <DatePicker name='birthday' onChange={(date, formikOnChange, formik) => {
+        const today = new Date()
+        const birthday = new Date(date)
+        const next = new Date(birthday)
+        next.setFullYear(today.getFullYear())
+        if (next < today) {
+          next.setFullYear(today.getFullYear()+1)
+        }
+        formik.form.setFieldValue('nextBirthday', next)
+        formikOnChange(date)
+      }} />
+      <DatePicker name='nextBirthday' />
+    </FormWrapper>
+  )
+  const form = getByTestId('form')
+  const [ birthday, nextBirthday ] = getAllByTestId('field-input')
+  const newValue = '09/26/2017'
+  fireEvent.change(birthday, { target: { value: newValue } })
+  expect(birthday.value).toBe(newValue)
+  expect(nextBirthday.value).toBe('09/26/2020')
+  fireEvent.submit(form)
+  await wait(() => {
+    expect(onSubmit).toHaveBeenCalledTimes(1)
+    expect(onSubmit).toHaveBeenCalledWith({ birthday: new Date(newValue), nextBirthday: new Date('09/26/2020') }, expect.any(Object))
+  })
+})

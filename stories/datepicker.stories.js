@@ -79,3 +79,19 @@ storiesOf('DatePicker Input', module)
       validate={validateBetweenDates}
     />
   ))
+  .add('Custom onChange Method', () => (
+    <>
+      <DatePicker name='birthday' onChange={(date, formikOnChange, formik) => {
+        const today = new Date()
+        const birthday = new Date(date)
+        const next = new Date(birthday)
+        next.setFullYear(today.getFullYear())
+        if (next < today) {
+          next.setFullYear(today.getFullYear()+1)
+        }
+        formik.form.setFieldValue('nextBirthday', next)
+        formikOnChange(date)
+      }} />
+      <DatePicker name='nextBirthday' />
+    </>
+  ))

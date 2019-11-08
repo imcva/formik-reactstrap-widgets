@@ -25,7 +25,7 @@ storiesOf('Text Input', module)
         <Col sm={4} className='my-2'>
           <Formik
             onSubmit={action('form-submitted')}
-            initialValues={{testInput: ''}}
+            initialValues={{testInput: '', secondaryInput: ''}}
             render={(props) => {
               return (
                 <Form>
@@ -49,4 +49,13 @@ storiesOf('Text Input', module)
       label='E-Mail:'
       validate={validateEmail}
     />
+  ))
+  .add('Custom OnChange Method', () => (
+    <>
+      <Input name='testInput' type='number' label='Number' onChange={(value, formikOnChange, formik) => {
+        formik.form.setFieldValue('secondaryInput', Number(value) * 2)
+        formikOnChange(value)
+      }} />
+      <Input name='secondaryInput' type='number' label='Times Two' />
+    </>
   ))

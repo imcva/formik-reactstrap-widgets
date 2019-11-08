@@ -305,3 +305,81 @@ test('Basic Radio With Children', async () => {
   const blue = getByTestId('blue-true')
   expect(blue).toHaveAttribute('alt', 'Test Alt')
 })
+
+test('Custom global onChange with basic radio', async () => {
+  const changeFunction = jest.fn()
+  const { debug, getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        green: true
+      }}
+      onSubmit={() => null}
+    >
+      <Choice multiple label='Color: ' onChange={(value, formikOnChange, formik) => {
+        changeFunction(value, formik.field.name) 
+        formikOnChange(value)
+      }}>
+        <Option name='red' value={true}>Red</Option>
+        <Option name='blue' value={true}>Blue</Option>
+        <Option name='green' value={true}>Green</Option>
+      </Choice>
+    </FormWrapper>
+  )
+  const red = getByTestId('red-true')
+  const blue = getByTestId('blue-true')
+  const green = getByTestId('green-true')
+  expect(red.checked).not.toBeTruthy()
+  expect(blue.checked).not.toBeTruthy()
+  expect(green.checked).toBeTruthy()
+  fireEvent.click(blue)
+  expect(changeFunction).toHaveBeenCalledTimes(1)
+  expect(changeFunction).toHaveBeenCalledWith(true, 'blue')
+  expect(red.checked).not.toBeTruthy()
+  expect(blue.checked).toBeTruthy()
+  expect(green.checked).toBeTruthy()
+  fireEvent.click(green)
+  expect(changeFunction).toHaveBeenCalledTimes(2)
+  expect(changeFunction).toHaveBeenCalledWith(false, 'green')
+  expect(red.checked).not.toBeTruthy()
+  expect(blue.checked).toBeTruthy()
+  expect(green.checked).not.toBeTruthy()
+})
+
+test('Custom global onChange with button radio', async () => {
+  const changeFunction = jest.fn()
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        green: true
+      }}
+      onSubmit={() => null}
+    >
+      <Choice multiple button label='Color: ' onChange={(value, formikOnChange, formik) => {
+        changeFunction(value, formik.field.name) 
+        formikOnChange(value)
+      }}>
+        <Option name='red' value={true}>Red</Option>
+        <Option name='blue' value={true}>Blue</Option>
+        <Option name='green' value={true}>Green</Option>
+      </Choice>
+    </FormWrapper>
+  )
+  const red = getByTestId('red-true')
+  const blue = getByTestId('blue-true')
+  const green = getByTestId('green-true')
+  expect(red).not.toHaveClass('active')
+  expect(blue).not.toHaveClass('active')
+  expect(green).toHaveClass('active')
+  fireEvent.click(blue)
+  expect(changeFunction).toHaveBeenCalledTimes(1)
+  expect(changeFunction).toHaveBeenCalledWith(true, 'blue')
+  expect(red).not.toHaveClass('active')
+  expect(blue).toHaveClass('active')
+  expect(green).toHaveClass('active')
+  fireEvent.click(green)
+  expect(changeFunction).toHaveBeenCalledTimes(2)
+  expect(changeFunction).toHaveBeenCalledWith(false, 'green')
+  expect(red).not.toHaveClass('active')
+  expect(blue).toHaveClass('active')
+  expect(green).not.toHaveClass('active')
+})

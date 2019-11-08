@@ -1,8 +1,10 @@
 import React from 'react'
 import { Input as StrapInput, InputProps as StrapInputProps } from 'reactstrap'
 import FieldGroup, { FieldGroupProps, FieldGroupRenderProps } from './FieldGroup';
+import { FieldProps, FormikHandlers } from 'formik'
 
-interface InputProps extends StrapInputProps, FieldGroupProps {
+interface InputProps extends Omit<StrapInputProps, 'onChange'>, FieldGroupProps {
+  onChange?: (value: any, formikOnChange: FormikHandlers['handleChange'], formik: FieldProps) => void
   inputProps?: Object
 }
 
@@ -29,6 +31,19 @@ const Input: React.FC<InputProps> = (props) => {
           addon={props.addon}
           className={props.className}
           cssModule={props.cssModule}
+          onChange={(e) => {
+            const newValue = e.target.value
+            const formikOnChange = (val: any) => {
+              if (props.name) {
+                fieldProps.formik.form.setFieldValue(props.name, val)
+              }
+            }
+            if (typeof props.onChange === 'function') {
+              props.onChange(newValue, formikOnChange, fieldProps.formik)
+            } else {
+              formikOnChange(newValue)
+            }
+          }}
           {...props.inputProps}
         />
       )}

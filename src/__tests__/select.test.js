@@ -238,3 +238,38 @@ test('Input Props', async () => {
   const input = getByTestId('field-input')
   expect(input).toHaveAttribute('alt', 'Test Alt')
 })
+
+test('Custom onChange Event', async () => {
+  const onSubmit = jest.fn()
+  const onChangeMethod = jest.fn()
+  const options = [
+    {value: 'red', text: 'Red'},
+    {value: 'yellow', text: 'Yellow'},
+    {value: 'blue', text: 'Blue'},
+  ]
+  const { getByTestId } = render(
+    <Formik 
+      onSubmit={onSubmit}
+      render={props => {
+        return (
+          <Form data-testid='form'>
+            <Select name='primary' onChange={(value, formikOnChange) => {
+              onChangeMethod(value)
+              formikOnChange(value)
+            }} options={options} inputProps={{'data-testid': 'primary-input'}} />
+          </Form>
+        )
+      }}
+    />
+  )
+  const form = getByTestId('form')
+  const primary = getByTestId('primary-input')
+  fireEvent.change(primary, { target: { value: 'blue' } })
+  expect(onChangeMethod).toHaveBeenCalledTimes(1)
+  expect(primary.value).toBe('blue')
+  fireEvent.submit(form)
+  await wait(() => {
+    expect(onSubmit).toHaveBeenCalledTimes(1)
+    expect(onSubmit).toHaveBeenCalledWith({ primary: 'blue' }, expect.any(Object))
+  })
+})

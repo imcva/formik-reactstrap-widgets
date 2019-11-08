@@ -7,11 +7,19 @@ const getValue = (name: string | undefined, formik: FieldProps) => {
   return get(formik.form.values, name)
 }
 
-const setValue = (name: string | undefined, value: any, multiple: boolean | undefined, formik: FieldProps) => {
+const getNewValue = (name: string | undefined, value: any, multiple: boolean | undefined, formik: FieldProps) => {
   if (name) {
     const currentValue = getValue(name, formik)
     const multipleValue = currentValue ? false : true
-    const newValue = multiple ? multipleValue : value
+    return multiple ? multipleValue : value
+  } else {
+    return undefined
+  }
+}
+
+const setValue = (name: string | undefined, value: any, multiple: boolean | undefined, formik: FieldProps) => {
+  if (name) {
+    const newValue = getNewValue(name, value, multiple, formik)
     formik.form.setFieldValue(name, newValue)
   }
 }
@@ -42,4 +50,4 @@ const convertOptionsFromChildren = <O extends {}>(opts: Array<O> | undefined, ch
   }
 }
 
-export { getValue, setValue, getActive, convertOptionsFromChildren }
+export { getValue, getNewValue, setValue, getActive, convertOptionsFromChildren }
