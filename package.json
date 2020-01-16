@@ -16,8 +16,7 @@
     "build-storybook": "build-storybook",
     "storybook": "start-storybook -p 6006",
     "test": "jest",
-    "preversion": "yarn build",
-    "postversion": "yarn publish"
+    "preversion": "yarn build"
   },
   "author": "Brandon Might",
   "license": "ISC",
