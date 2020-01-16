@@ -58,6 +58,7 @@ const DatePicker: React.FC<DatePickerProps> = (props) => (
     name={props.name}
     label={props.label}
     validate={props.validate}
+    formText={props.formText}
     render={(fieldProps: FieldGroupRenderProps) => {
       return (
         <ReactDatePicker

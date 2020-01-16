@@ -173,3 +173,20 @@ test('Custom onChange Method', async () => {
     expect(onSubmit).toHaveBeenCalledWith({ birthday: new Date(newValue), nextBirthday: new Date('09/26/2020') }, expect.any(Object))
   })
 })
+
+test('Input with FormText', async () => {
+  const onSubmit = jest.fn()
+  const text = 'Select Your Birthday!'
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        birthday: new Date('12/19/2019')
+      }}
+      onSubmit={onSubmit}
+    >
+      <DatePicker label='Birthday' formText={text} name='birthday' />
+    </FormWrapper>
+  )
+  const formText = getByTestId('form-text')
+  expect(formText.innerHTML).toBe(text)
+})

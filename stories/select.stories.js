@@ -66,6 +66,9 @@ storiesOf('Select Input', module)
   .add('Options using array', () => ( 
     <Select options={options} name='color' label='Select A Color: ' />
   ))
+  .add('FormText', () => ( 
+    <Select options={options} formText='Please select your favorite color.' name='color' label='Select A Color: ' />
+  ))
   .add('Disabled', () => (
     <Select
       disabled

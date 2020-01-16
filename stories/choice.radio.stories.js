@@ -77,6 +77,14 @@ storiesOf('Radio Input', module)
       </Choice>
     </>
   ))
+  .add('FormText', () => (
+    <>
+      <Choice name='basicRadio' label='Color' formText='Select your favorite color.'>
+        <option value='blue' color='info'>Blue</option>
+        <option value='red' color='danger'>Red</option>
+      </Choice>
+    </>
+  ))
   .add('Plaintext Basic Radio', () => (
     <>
       <Choice name='plaintextBasicRadios.1' label='Select a Color (Required):' value='red' plaintext>

@@ -94,6 +94,15 @@ storiesOf('Checkbox Input', module)
       </Choice>
     </>
   ))
+  .add('FormText', () => (
+    <>
+      <Choice name='basicRadio' label='Color' formText='Select your favorite color(s).' multiple>
+        <option name='basicCheckbox.blue' value='blue' color='info'>Blue</option>
+        <option name='basicCheckbox.green' value='green' color='info'>Green</option>
+        <option name='basicCheckbox.red' value='red' color='danger'>Red</option>
+      </Choice>
+    </>
+  ))
   .add('Plaintext Basic Checkbox', () => (
     <>
       <Choice label='Select Your Favorite Colors (Required):' multiple plaintext>

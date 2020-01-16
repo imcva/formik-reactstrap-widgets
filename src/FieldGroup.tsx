@@ -2,7 +2,8 @@ import React from 'react'
 import {
   Label,
   FormGroup,
-  FormFeedback
+  FormFeedback,
+  FormText
 } from 'reactstrap'
 // @ts-ignore
 import get from 'lodash/get'
@@ -14,6 +15,7 @@ interface GroupProps {
   validate?: any
   DisplayLabel?: boolean
   label?: React.Component | String
+  formText?: string
 }
 
 interface FieldGroupRenderProps {
@@ -25,7 +27,7 @@ interface FieldGroupRenderProps {
 }
 
 const Group: React.FC<GroupProps> = (props) => {
-  const { formik, label, render, validate } = props
+  const { formik, label, render, validate, formText } = props
   const { field, form } = formik
   const { name } = field
   const { touched, errors } = form
@@ -47,6 +49,10 @@ const Group: React.FC<GroupProps> = (props) => {
       }
       { render && typeof render === 'function'
         ? render(inputProps) 
+        : null
+      }
+      {formText 
+        ? <FormText className='d-block' data-testid='form-text'>{formText}</FormText>
         : null
       }
       {invalid && validate
@@ -79,6 +85,7 @@ const FieldGroup: React.FC<FieldGroupProps> = (props) => {
                 render={props.render}
                 DisplayLabel={props.DisplayLabel}
                 validate={props.validate}
+                formText={props.formText}
               />
             </FormGroup>
           )
@@ -90,6 +97,7 @@ const FieldGroup: React.FC<FieldGroupProps> = (props) => {
               render={props.render}
               DisplayLabel={props.DisplayLabel}
               validate={props.validate}
+              formText={props.formText}
             />
           )
         }

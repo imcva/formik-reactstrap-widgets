@@ -40,6 +40,7 @@ storiesOf('Text Input', module)
     </Container>
   ))
   .add('Basic', () => <Input name='testInput' label='Test Input' />)
+  .add('FormText', () => <Input name='testInput' label='Test Input' formText='This is some FormText below an input.' />)
   .add('Disabled', () => <Input disabled name='testInput' label='Test Input' />)
   .add('Plaintext Input', () => <Input name='testInput' plaintext label='Password:' />)
   .add('Password Type Input', () => <Input name='testInput' type='password' label='Password:' />)

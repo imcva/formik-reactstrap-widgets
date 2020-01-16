@@ -160,3 +160,20 @@ test('Custom OnChange', async () => {
     expect(onSubmit).toHaveBeenCalledWith({ number: newValue, timesTwo: (newValue * 2) }, expect.any(Object))
   })
 })
+
+test('Input with FormText', async () => {
+  const onSubmit = jest.fn()
+  const text = 'Enter the E-Mail you used to sign up with.'
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        email: 'test@example.com'
+      }}
+      onSubmit={onSubmit}
+    >
+      <Input name='email' formText={text} label='E-Mail' />
+    </FormWrapper>
+  )
+  const formText = getByTestId('form-text')
+  expect(formText.innerHTML).toBe(text)
+})

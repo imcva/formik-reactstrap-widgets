@@ -383,3 +383,26 @@ test('Custom global onChange with button radio', async () => {
   expect(blue).toHaveClass('active')
   expect(green).not.toHaveClass('active')
 })
+
+test('Input with FormText', async () => {
+  const onSubmit = jest.fn()
+  const text = 'Select your favorite color(s).'
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: {
+          green: true
+        }
+      }}
+      onSubmit={onSubmit}
+    >
+      <Choice multiple label='Color' formText={text}>
+        <Option name='color.red' value='red'>Red</Option>
+        <Option name='color.blue' value='blue'>Blue</Option>
+        <Option name='color.green' value='green'>Green</Option>
+      </Choice>
+    </FormWrapper>
+  )
+  const formText = getByTestId('form-text')
+  expect(formText.innerHTML).toBe(text)
+})

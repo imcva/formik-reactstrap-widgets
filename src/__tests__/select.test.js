@@ -273,3 +273,25 @@ test('Custom onChange Event', async () => {
     expect(onSubmit).toHaveBeenCalledWith({ primary: 'blue' }, expect.any(Object))
   })
 })
+
+test('Input with FormText', async () => {
+  const onSubmit = jest.fn()
+  const text = 'Enter the E-Mail you used to sign up with.'
+  const { getByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: 'green'
+      }}
+      onSubmit={onSubmit}
+    >
+      <Select name='color' label='Select a Color' formText={text}>
+        <option value='red'>Red</option>
+        <option value='blue'>Blue</option>
+        <option value='green'>Green</option>
+      </Select>
+    </FormWrapper>
+  )
+  const formText = getByTestId('form-text')
+  expect(formText.innerHTML).toBe(text)
+})
+

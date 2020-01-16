@@ -20,6 +20,7 @@ const Choice: React.FC<ChoiceProps> = (props) => {
       name={props.name}
       label={props.label}
       validate={props.name ? props.validate : undefined}
+      formText={props.formText}
       render={(fieldProps: FieldGroupRenderProps) => { 
         return (
           <ChoiceChildren 
