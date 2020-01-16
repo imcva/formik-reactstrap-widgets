@@ -4,7 +4,7 @@ import get from 'lodash/get'
 import { Input as StrapInput, Label, FormGroup, InputProps } from 'reactstrap'
 import { Field, FieldProps }  from 'formik'
 // @ts-ignore
-import className from 'classnames'
+import className from 'classnames/dedupe'
 
 import { getActive, getNewValue } from './helpers'
 

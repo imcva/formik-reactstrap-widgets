@@ -1,7 +1,7 @@
 import React from 'react'
 import { ButtonGroup, FormGroup } from 'reactstrap'
 // @ts-ignore
-import className from 'classnames'
+import className from 'classnames/dedupe'
 import OptionLevelErrors, { OptionLevelErrorsProps } from './OptionLevelErrors'
 
 interface GroupProps extends OptionLevelErrorsProps {
