@@ -1,6 +1,6 @@
 {
   "name": "formik-reactstrap-widgets",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "description": "Bootstrap form fields and widgets for Formik",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
@@ -19,7 +19,8 @@
     "build-storybook": "build-storybook",
     "storybook": "start-storybook -p 6006",
     "test": "jest",
-    "preversion": "yarn build"
+    "preversion": "yarn build",
+    "postversion": "yarn publish --non-interactive"
   },
   "author": "Brandon Might",
   "license": "ISC",
