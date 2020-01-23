@@ -78,7 +78,7 @@ const FieldGroup: React.FC<FieldGroupProps> = (props) => {
       render={(formik: FieldProps) => {
         if (props.FormGroup === undefined || props.FormGroup === true) {
           return (
-            <FormGroup row={props.row} check={props.check}>
+            <FormGroup row={props.row} check={props.check} data-testid='FormGroup'>
               <Group 
                 formik={formik}
                 label={props.label}

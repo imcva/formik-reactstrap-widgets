@@ -15,6 +15,7 @@ const Input: React.FC<InputProps> = (props) => {
       name={props.name}
       validate={props.validate}
       formText={props.formText}
+      FormGroup={props.FormGroup}
       render={(fieldProps: FieldGroupRenderProps) => (
         <StrapInput
           {...fieldProps.formik.field}

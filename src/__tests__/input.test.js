@@ -177,3 +177,42 @@ test('Input with FormText', async () => {
   const formText = getByTestId('form-text')
   expect(formText.innerHTML).toBe(text)
 })
+
+test('No FormGroup', async () => {
+  const { queryByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        email: 'test@example.com'
+      }}
+    >
+      <Input name='email' FormGroup={false} label='E-Mail' />
+    </FormWrapper>
+  )
+  expect(queryByTestId('FormGroup')).toBeNull();
+})
+
+test('With FormGroup Explicitly', async () => {
+  const { queryByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        email: 'test@example.com'
+      }}
+    >
+      <Input name='email' FormGroup={true} label='E-Mail' />
+    </FormWrapper>
+  )
+  expect(queryByTestId('FormGroup')).toBeTruthy();
+})
+
+test('With FormGroup Default', async () => {
+  const { queryByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        email: 'test@example.com'
+      }}
+    >
+      <Input name='email' label='E-Mail' />
+    </FormWrapper>
+  )
+  expect(queryByTestId('FormGroup')).toBeTruthy();
+})
