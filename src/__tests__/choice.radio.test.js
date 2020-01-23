@@ -388,3 +388,60 @@ test('Input with FormText', async () => {
   const formText = getByTestId('form-text')
   expect(formText.innerHTML).toBe(text)
 })
+
+test('Without FormGroup', async () => {
+  const { queryByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: {
+          green: true
+        }
+      }}
+    >
+      <Choice FormGroup={false} name='color' label='Color'>
+        <Option value='red'>Red</Option>
+        <Option value='blue'>Blue</Option>
+        <Option value='green'>Green</Option>
+      </Choice>
+    </FormWrapper>
+  )
+  expect(queryByTestId('FormGroup')).toBeNull();
+})
+
+test('With FormGroup Explicitly', async () => {
+  const { queryByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: {
+          green: true
+        }
+      }}
+    >
+      <Choice label='Color' name='color' FormGroup={true}>
+        <Option value='red'>Red</Option>
+        <Option value='blue'>Blue</Option>
+        <Option value='green'>Green</Option>
+      </Choice>
+    </FormWrapper>
+  )
+  expect(queryByTestId('FormGroup')).toBeTruthy();
+})
+
+test('With FormGroup Default', async () => {
+  const { queryByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        color: {
+          green: true
+        }
+      }}
+    >
+      <Choice label='Color'>
+        <Option value='red'>Red</Option>
+        <Option value='blue'>Blue</Option>
+        <Option value='green'>Green</Option>
+      </Choice>
+    </FormWrapper>
+  )
+  expect(queryByTestId('FormGroup')).toBeTruthy();
+})
