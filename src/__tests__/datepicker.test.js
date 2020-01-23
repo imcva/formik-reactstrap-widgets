@@ -190,3 +190,42 @@ test('Input with FormText', async () => {
   const formText = getByTestId('form-text')
   expect(formText.innerHTML).toBe(text)
 })
+
+test('Without FormGroup', async () => {
+  const { queryByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        birthday: new Date('12/19/2019')
+      }}
+    >
+      <DatePicker FormGroup={false} label='Birthday' name='birthday' />
+    </FormWrapper>
+  )
+  expect(queryByTestId('FormGroup')).toBeNull();
+})
+
+test('With FormGroup Explicitly', async () => {
+  const { queryByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        birthday: new Date('12/19/2019')
+      }}
+    >
+      <DatePicker FormGroup={true} label='Birthday' name='birthday' />
+    </FormWrapper>
+  )
+  expect(queryByTestId('FormGroup')).toBeTruthy();
+})
+
+test('With FormGroup Default', async () => {
+  const { queryByTestId } = render(
+    <FormWrapper 
+      initialValues={{
+        birthday: new Date('12/19/2019')
+      }}
+    >
+      <DatePicker label='Birthday' name='birthday' />
+    </FormWrapper>
+  )
+  expect(queryByTestId('FormGroup')).toBeTruthy();
+})
