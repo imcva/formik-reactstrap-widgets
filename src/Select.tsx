@@ -75,6 +75,7 @@ const Select: React.FC<SelectProps> = (props) => {
       label={props.label}
       validate={props.validate}
       formText={props.formText}
+      FormGroup={props.FormGroup}
       render={(fieldProps: FieldGroupRenderProps) => { 
         const [ insertOption , setInsertOption ] = useState()
         const { formik } = fieldProps
