@@ -27,7 +27,7 @@ interface FieldGroupRenderProps {
 }
 
 const Group: React.FC<GroupProps> = (props) => {
-  const { formik, label, render, validate, formText } = props
+  const { formik, label, render, formText } = props
   const { field, form } = formik
   const { name } = field
   const { touched, errors } = form
@@ -55,7 +55,7 @@ const Group: React.FC<GroupProps> = (props) => {
         ? <FormText className='d-block' data-testid='form-text'>{formText}</FormText>
         : null
       }
-      {invalid && validate
+      {invalid 
         ? <FormFeedback className='d-block' data-testid='invalid-text'>{errors[name]}</FormFeedback>
         : null
       }
