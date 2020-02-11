@@ -56,7 +56,7 @@ const Group: React.FC<GroupProps> = (props) => {
         : null
       }
       {invalid 
-        ? <FormFeedback className='d-block' data-testid='invalid-text'>{errors[name]}</FormFeedback>
+        ? <FormFeedback className='d-block' data-testid='invalid-text'>{fieldErrors}</FormFeedback>
         : null
       }
     </>
