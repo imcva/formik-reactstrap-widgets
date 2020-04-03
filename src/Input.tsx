@@ -1,55 +1,72 @@
 import React from 'react'
 import { Input as StrapInput, InputProps as StrapInputProps } from 'reactstrap'
-import FieldGroup, { FieldGroupProps, FieldGroupRenderProps } from './FieldGroup';
-import { FieldProps, FormikHandlers } from 'formik'
+import FieldGroup from './FieldGroupExperimental';
+import { 
+  FieldConfig,
+  FormikHandlers,
+  FormikProps,
+  useField,
+  useFormikContext,
+  FieldInputProps,
+} from 'formik'
+import { useGlobalProps } from './useGlobalProps';
 
-interface InputProps extends Omit<StrapInputProps, 'onChange'>, FieldGroupProps {
-  onChange?: (value: any, formikOnChange: FormikHandlers['handleChange'], formik: FieldProps) => void
-  inputProps?: Object
+interface FormikBag<Value = any> {
+  field: FieldInputProps<Value>
+  form: FormikProps<Value>
 }
 
+interface InputProps<Value = any> extends Omit<StrapInputProps, 'onChange'>, Omit<FieldConfig, keyof StrapInputProps> {
+  name: string
+  label?: React.Component | string
+  onChange?: (value: any, formikOnChange: FormikHandlers['handleChange'], formik: FormikBag) => void
+}
+
+
 const Input: React.FC<InputProps> = (props) => { 
+  const [ field, meta ] = useField<any>({
+    name: props.name,
+    validate: props.validate
+  })
+  const formik = useFormikContext()
+  const formikBag = {
+    field,
+    form: formik,
+    meta
+  }
+  const { globalProps } = useGlobalProps()
+  const {
+    label,
+    onChange,
+    validate,
+    inputProps,
+    ...rest
+  } = props
+  const plaintext = props.plaintext !== undefined ? props.plaintext : globalProps.plaintext 
+  const invalid = meta.error !== undefined && meta.touched 
   return (
-    <FieldGroup
-      label={props.label}
-      name={props.name}
-      validate={props.validate}
-      formText={props.formText}
-      FormGroup={props.FormGroup}
-      render={(fieldProps: FieldGroupRenderProps) => (
-        <StrapInput
-          {...fieldProps.formik.field}
-          data-testid={fieldProps['data-testid']}
-          disabled={props.disabled}
-          readOnly={props.plaintext}
-          type={props.type}
-          size={props.size}
-          bsSize={props.bsSize}
-          valid={props.valid}
-          invalid={!!props.invalid ? props.invalid : fieldProps.invalid}
-          tag={props.tag}
-          innerRef={props.innerRef} 
-          plaintext={props.plaintext}
-          addon={props.addon}
-          className={props.className}
-          cssModule={props.cssModule}
-          onChange={(e) => {
-            const newValue = e.target.value
-            const formikOnChange = (val: any) => {
-              if (props.name) {
-                fieldProps.formik.form.setFieldValue(props.name, val)
-              }
-            }
-            if (typeof props.onChange === 'function') {
-              props.onChange(newValue, formikOnChange, fieldProps.formik)
-            } else {
-              formikOnChange(newValue)
-            }
-          }}
-          {...props.inputProps}
-        />
-      )}
-    />
+    <FieldGroup field={field} meta={meta} label={label} invalid={invalid}>
+      <StrapInput
+        {...field}
+        {...rest}
+        readOnly={plaintext}
+        plaintext={plaintext}
+        invalid={props.invalid || invalid}
+        data-testid={props['data-testid'] || 'field-input'}
+        onChange={(e) => {
+          const newValue = e.target.value
+          const formikOnChange = () => {
+            field.onChange(e)
+          }
+          if (typeof onChange === 'function') {
+            onChange(newValue, formikOnChange, formikBag)
+          } else {
+            formikOnChange()
+          }
+        }}
+        {...inputProps}
+      />
+    </FieldGroup>
   )
 }
 

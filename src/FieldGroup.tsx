@@ -2,32 +2,33 @@ import React from 'react'
 import {
   Label,
   FormGroup,
-  FormFeedback,
-  FormText
+  FormFeedback
 } from 'reactstrap'
 // @ts-ignore
 import get from 'lodash/get'
 import { Field, FieldProps } from 'formik';
+import { useGlobalProps } from './useGlobalProps';
 
 interface GroupProps {
-  formik: FieldProps,
+  formik: FieldProps
   render?: (props: FieldGroupRenderProps) => React.ReactNode
   validate?: any
   DisplayLabel?: boolean
   label?: React.Component | String
-  formText?: string
+  plaintext?: boolean
 }
 
 interface FieldGroupRenderProps {
-  formik: FieldProps,
+  formik: FieldProps
   field: Object
   id: string
   invalid: boolean
   'data-testid': string
+  plaintext?: boolean
 }
 
 const Group: React.FC<GroupProps> = (props) => {
-  const { formik, label, render, formText } = props
+  const { formik, label, render, validate } = props
   const { field, form } = formik
   const { name } = field
   const { touched, errors } = form
@@ -37,6 +38,7 @@ const Group: React.FC<GroupProps> = (props) => {
   const inputProps: FieldGroupRenderProps = {
     formik: props.formik,
     field: field,
+    plaintext: props.plaintext,
     invalid,
     id: name,
     'data-testid': 'field-input'
@@ -51,12 +53,8 @@ const Group: React.FC<GroupProps> = (props) => {
         ? render(inputProps) 
         : null
       }
-      {formText 
-        ? <FormText className='d-block' data-testid='form-text'>{formText}</FormText>
-        : null
-      }
-      {invalid 
-        ? <FormFeedback className='d-block' data-testid='invalid-text'>{fieldErrors}</FormFeedback>
+      {invalid && validate
+        ? <FormFeedback className='d-block' data-testid='invalid-text'>{errors[name]}</FormFeedback>
         : null
       }
     </>
@@ -71,21 +69,23 @@ interface FieldGroupProps extends Omit<GroupProps, 'formik'> {
 }
 
 const FieldGroup: React.FC<FieldGroupProps> = (props) => {
+  const { globalProps } = useGlobalProps()
   return (
     <Field
       name={props.name}
       validate={props.validate}
       render={(formik: FieldProps) => {
+        console.log(formik)
         if (props.FormGroup === undefined || props.FormGroup === true) {
           return (
-            <FormGroup row={props.row} check={props.check} data-testid='FormGroup'>
+            <FormGroup row={props.row} check={props.check}>
               <Group 
                 formik={formik}
                 label={props.label}
                 render={props.render}
                 DisplayLabel={props.DisplayLabel}
                 validate={props.validate}
-                formText={props.formText}
+                plaintext={globalProps.plaintext}
               />
             </FormGroup>
           )
@@ -97,7 +97,7 @@ const FieldGroup: React.FC<FieldGroupProps> = (props) => {
               render={props.render}
               DisplayLabel={props.DisplayLabel}
               validate={props.validate}
-              formText={props.formText}
+              plaintext={globalProps.plaintext}
             />
           )
         }

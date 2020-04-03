@@ -1,13 +1,20 @@
 import React from 'react'
 import ReactDatePicker, { ReactDatePickerProps  } from 'react-datepicker'
 import { Input, InputGroup, InputGroupAddon, Button, InputProps } from 'reactstrap'
-import { FieldProps } from 'formik'
-import FieldGroup, { FieldGroupRenderProps, FieldGroupProps } from './FieldGroup';
+import { useField, useFormikContext, FieldInputProps, FormikProps } from 'formik'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarAlt } from '@fortawesome/free-regular-svg-icons'
 
+import FieldGroup from './FieldGroupExperimental';
+import { useGlobalProps } from './useGlobalProps'
+
 import "react-datepicker/dist/react-datepicker.css";
 import "./DatePicker.css"
+
+interface FormikBag<Value = any> {
+  field: FieldInputProps<Value>
+  form: FormikProps<Value>
+}
 
 const formatValue = (value: string) => {
   if (value) {
@@ -21,7 +28,7 @@ const formatValue = (value: string) => {
   return undefined
 }
 
-const DatePickerInput: React.FC<InputProps> = (props, ref) => {
+const DatePickerInput: React.RefForwardingComponent<any, InputProps> = (props, ref) => {
   return ( 
     <InputGroup>
       <Input {...props} innerRef={ref} />
@@ -40,12 +47,12 @@ const DatePickerInput: React.FC<InputProps> = (props, ref) => {
 
 const DatePickerInputWithRef: React.FC<InputProps> = React.forwardRef(DatePickerInput)
 
-interface DatePickerProps extends Partial<Omit<ReactDatePickerProps, 'onChange'>>, Omit<FieldGroupProps, 'render'>, Omit<InputProps, 'onChange'> {
-  onChange?: (date: Date | null, formikOnChange: (date: Date) => void, formik: FieldProps) => void
-  inputProps?: object
+interface DatePickerProps extends Partial<Omit<ReactDatePickerProps, 'onChange'>>, Omit<InputProps, 'onChange'> {
+  name: string
+  onChange?: (date: Date | null, formikOnChange: (date: Date) => void, formik: FormikBag) => void
 }
 
-const formikUpdateDate = (name: string | undefined, formik: FieldProps) => {
+const formikUpdateDate = (name: string | undefined, formik: FormikBag) => {
   return (date: Date | null) => {
     if (name) {
       formik.form.setFieldValue(name, date)
@@ -53,53 +60,62 @@ const formikUpdateDate = (name: string | undefined, formik: FieldProps) => {
   }
 }
 
-const DatePicker: React.FC<DatePickerProps> = (props) => (
-  <FieldGroup
-    name={props.name}
-    label={props.label}
-    validate={props.validate}
-    formText={props.formText}
-    FormGroup={props.FormGroup}
-    render={(fieldProps: FieldGroupRenderProps) => {
-      return (
-        <ReactDatePicker
-          todayButton='Today'
-          {...fieldProps.formik.field}
-          disabled={props.disabled}
-          readOnly={props.plaintext}
-          value={undefined}
-          selected={formatValue(fieldProps.formik.field.value)}
-          onChange={(date) => {
-            const updateDate = formikUpdateDate(props.name, fieldProps.formik)
-            if (typeof props.onChange === 'function') {
-              props.onChange(date, updateDate, fieldProps.formik)
-            } else {
-              updateDate(date)
-            }
-          }}
-          {...props.datePickerProps}
-          customInput={
-            <DatePickerInputWithRef
-              data-testid={fieldProps['data-testid']}
-              type={props.type}
-              size={props.size}
-              bsSize={props.bsSize}
-              valid={props.valid}
-              invalid={!!props.invalid ? props.invalid : fieldProps.invalid}
-              tag={props.tag}
-              innerRef={props.innerRef} 
-              plaintext={props.plaintext}
-              addon={props.addon}
-              className={props.className}
-              cssModule={props.cssModule}
-              {...props.inputProps}
-            />
-         }
-        />
-      )
-    }}
-  />
-)
-
+const DatePicker: React.FC<DatePickerProps> = (props) => { 
+  const [ field, meta ] = useField<any>({
+    name: props.name,
+    validate: props.validate
+  })
+  const formik = useFormikContext()
+  const formikBag = {
+    field,
+    form: formik,
+    meta
+  }
+  const { globalProps } = useGlobalProps()
+  const {
+    label,
+    onChange,
+    validate,
+    onSelect,
+    inputProps,
+    ...rest
+  } = props
+  const plaintext = props.plaintext !== undefined ? props.plaintext : globalProps.plaintext 
+  const invalid = meta.error !== undefined && meta.touched 
+  return (
+    <FieldGroup field={field} meta={meta} label={label} invalid={invalid}>
+      <ReactDatePicker
+        todayButton='Today'
+        {...field}
+        {...rest}
+        disabled={props.disabled}
+        readOnly={plaintext}
+        value={undefined}
+        selected={formatValue(field.value)}
+        onSelect={onSelect}
+        onChange={(date) => {
+          const updateDate = formikUpdateDate(props.name, formikBag)
+          if (typeof props.onChange === 'function') {
+            props.onChange(date, updateDate, formikBag)
+          } else {
+            updateDate(date)
+          }
+        }}
+        customInput={
+          <DatePickerInputWithRef 
+            {...rest} 
+            data-testid={props['data-testid'] || 'field-input'}
+            disabled={props.disabled}
+            readOnly={plaintext}
+            plaintext={plaintext}
+            invalid={invalid}
+            {...inputProps}
+          />
+        }
+      />
+    </FieldGroup>
+  )
+ }
+  
 export default DatePicker
 export { DatePickerProps }

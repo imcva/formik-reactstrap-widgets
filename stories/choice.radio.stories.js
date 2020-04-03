@@ -12,7 +12,7 @@ import {
   Label
 } from 'reactstrap'
 
-import Choice from '../src/Choice'
+import { Radio } from '../src/Choice'
 
 import 'bootstrap/dist/css/bootstrap.css'
 
@@ -63,110 +63,101 @@ storiesOf('Radio Input', module)
   ))
   .add('Basic Radio w/ Validation', () => (
     <>
-      <Choice name='basicRadio' label='Select a Color (Required):' validate={validateRequired}>
+      <Radio name='basicRadio' label='Select a Color (Required):' validate={validateRequired}>
         <option value='blue' color='info'>Blue</option>
         <option value='red' color='danger'>Red</option>
-      </Choice>
-      <Choice name='basicRadioAllDisabled' label='Select a Color (Required):' disabled>
+      </Radio>
+      <Radio name='basicRadioAllDisabled' label='Select a Color (Required):' disabled>
         <option value='blue' color='info'>Blue</option>
         <option value='red' color='danger'>Red</option>
-      </Choice>
-      <Choice name='basicRadioSingleDisabled' label='Select a Color (Required):'>
+      </Radio>
+      <Radio name='basicRadioSingleDisabled' label='Select a Color (Required):'>
         <option value='blue' color='info' disabled>Blue</option>
         <option value='red' color='danger'>Red</option>
-      </Choice>
-    </>
-  ))
-  .add('FormText', () => (
-    <>
-      <Choice name='basicRadio' label='Color' formText='Select your favorite color.'>
-        <option value='blue' color='info'>Blue</option>
-        <option value='red' color='danger'>Red</option>
-      </Choice>
+      </Radio>
     </>
   ))
   .add('Plaintext Basic Radio', () => (
     <>
-      <Choice name='plaintextBasicRadios.1' label='Select a Color (Required):' value='red' plaintext>
+      <Radio name='plaintextBasicRadios.1' label='Select a Color (Required):' value='red' plaintext>
         <option value='blue' color='info'>Blue</option>
         <option value='red' color='danger'>Red</option>
-      </Choice>
-      <Choice name='plaintextBasicRadios.2' value='blue' label='Select a Color (Required):'>
+      </Radio>
+      <Radio name='plaintextBasicRadios.2' value='blue' label='Select a Color (Required):'>
         <option value='red' color='danger'>Red</option>
         <option value='blue' color='info' plaintext>Blue</option>
-      </Choice>
+      </Radio>
     </>
   ))
   .add('Plaintext Button Radio', () => (
     <>
-      <Choice name='plaintextButtonRadios.1' label='Select a Color (Required):' value='red' plaintext button>
+      <Radio name='plaintextButtonRadios.1' label='Select a Color (Required):' value='red' plaintext button>
         <option value='blue' color='info' className='mx-1'>Blue</option>
         <option value='red' color='danger' className='mx-1'>Red</option>
-      </Choice>
-      <Choice name='plaintextButtonRadios.2' value='blue' label='Select a Color (Required):' plaintext button group>
+      </Radio>
+      <Radio name='plaintextButtonRadios.2' value='blue' label='Select a Color (Required):' plaintext button group>
         <option value='red' color='danger'>Red</option>
         <option value='blue' color='info'>Blue</option>
-      </Choice>
-      <Choice name='plaintextButtonRadios.3' value='blue' label='Select a Color (Required):' plaintext button block>
+      </Radio>
+      <Radio name='plaintextButtonRadios.3' value='blue' label='Select a Color (Required):' plaintext button block>
         <option value='red' color='danger'>Red</option>
         <option value='blue' color='info'>Blue</option>
-
-      </Choice>
+      </Radio>
     </>
   ))
   .add('Buttons w/ Validation', () => (
     <>
-      <Choice label='Regular Buttons:' button>
+      <Radio name='regularButtons' label='Regular Buttons:' button>
         <option value='blue' color='info' className='mx-1'>Blue</option>
         <option value='red' color='danger' className='mx-1'>Red</option>
-      </Choice>
-      <Choice name='groupButtons' label='Group Buttons:' outline button group validate={validateRequired}>
+      </Radio>
+      <Radio name='groupButtons' label='Group Buttons:' outline button group validate={validateRequired}>
         <option value='blue' color='info'>Blue</option>
         <option value='red' color='danger'>Red</option>
-      </Choice>
-      <Choice name='blockButtons' label='Block Buttons:' button block validate={validateRequired}>
+      </Radio>
+      <Radio name='blockButtons' label='Block Buttons:' button block validate={validateRequired}>
         <option value='blue' color='info' className='mx-1'>Blue</option>
         <option value='red' color='danger' className='mx-1'>Red</option>
-      </Choice>
+      </Radio>
     </>
   ))
   .add('All Buttons Disabled', () => (
     <>
-      <Choice name='regularButtons' label='Regular Buttons:' disabled button validate={validateRequired}>
+      <Radio name='regularButtons' label='Regular Buttons:' disabled button validate={validateRequired}>
         <option value='blue' color='info' className='mx-1'>Blue</option>
         <option value='red' color='danger' className='mx-1'>Red</option>
-      </Choice>
-      <Choice name='groupButtons' label='Group Buttons' disabled button group validate={validateRequired}>
+      </Radio>
+      <Radio name='groupButtons' label='Group Buttons' disabled button group validate={validateRequired}>
         <option value='blue' color='info'>Blue</option>
         <option value='red' color='danger'>Red</option>
-      </Choice>
-      <Choice name='blockButtons' label='Block Buttons:' disabled button block validate={validateRequired}>
+      </Radio>
+      <Radio name='blockButtons' label='Block Buttons:' disabled button block validate={validateRequired}>
         <option value='blue' color='info' className='mx-1'>Blue</option>
         <option value='red' color='danger' className='mx-1'>Red</option>
-      </Choice>
+      </Radio>
     </>
   ))
   .add('Single Buttons Disabled', () => (
     <>
-      <Choice name='regularButtons' label='Regular Buttons:' button validate={validateRequired}>
+      <Radio name='regularButtons' label='Regular Buttons:' button validate={validateRequired}>
         <option value='blue' color='info' className='mx-1' disabled>Blue</option>
         <option value='red' color='danger' className='mx-1'>Red</option>
-      </Choice>
-      <Choice name='groupButtons' label='Group Buttons:' button group validate={validateRequired}>
+      </Radio>
+      <Radio name='groupButtons' label='Group Buttons:' button group validate={validateRequired}>
         <option value='blue' color='info' disabled>Blue</option>
         <option value='red' color='danger'>Red</option>
-      </Choice>
-      <Choice name='blockButtons' label='Block Buttons:' button block validate={validateRequired}>
+      </Radio>
+      <Radio name='blockButtons' label='Block Buttons:' button block validate={validateRequired}>
         <option value='blue' color='info' className='mx-1' disabled>Blue</option>
         <option value='red' color='danger' className='mx-1'>Red</option>
-      </Choice>
+      </Radio>
     </>
   ))
   .add('Button Group Block', () => (
     <>
-      <Choice name='regularButtons' label='Regular Buttons:' button group block validate={validateRequired}>
+      <Radio name='regularButtons' label='Regular Buttons:' button group block validate={validateRequired}>
         <option value='blue' color='info'>Blue</option>
         <option value='red' color='danger'>Red</option>
-      </Choice>
+      </Radio>
     </>
   ))

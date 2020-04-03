@@ -4,7 +4,9 @@ import {
   fireEvent,
   cleanup,
   wait,
-  getAllByTestId
+  act,
+  getAllByTestId,
+  waitForDomChange
 } from '@testing-library/react'
 import { Formik, Form } from 'formik'
 import 'jest-dom/extend-expect'
@@ -159,60 +161,4 @@ test('Custom OnChange', async () => {
     expect(onSubmit).toHaveBeenCalledTimes(1)
     expect(onSubmit).toHaveBeenCalledWith({ number: newValue, timesTwo: (newValue * 2) }, expect.any(Object))
   })
-})
-
-test('Input with FormText', async () => {
-  const onSubmit = jest.fn()
-  const text = 'Enter the E-Mail you used to sign up with.'
-  const { getByTestId } = render(
-    <FormWrapper 
-      initialValues={{
-        email: 'test@example.com'
-      }}
-      onSubmit={onSubmit}
-    >
-      <Input name='email' formText={text} label='E-Mail' />
-    </FormWrapper>
-  )
-  const formText = getByTestId('form-text')
-  expect(formText.innerHTML).toBe(text)
-})
-
-test('No FormGroup', async () => {
-  const { queryByTestId } = render(
-    <FormWrapper 
-      initialValues={{
-        email: 'test@example.com'
-      }}
-    >
-      <Input name='email' FormGroup={false} label='E-Mail' />
-    </FormWrapper>
-  )
-  expect(queryByTestId('FormGroup')).toBeNull();
-})
-
-test('With FormGroup Explicitly', async () => {
-  const { queryByTestId } = render(
-    <FormWrapper 
-      initialValues={{
-        email: 'test@example.com'
-      }}
-    >
-      <Input name='email' FormGroup={true} label='E-Mail' />
-    </FormWrapper>
-  )
-  expect(queryByTestId('FormGroup')).toBeTruthy();
-})
-
-test('With FormGroup Default', async () => {
-  const { queryByTestId } = render(
-    <FormWrapper 
-      initialValues={{
-        email: 'test@example.com'
-      }}
-    >
-      <Input name='email' label='E-Mail' />
-    </FormWrapper>
-  )
-  expect(queryByTestId('FormGroup')).toBeTruthy();
 })

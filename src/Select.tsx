@@ -1,21 +1,28 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { Input, InputProps } from 'reactstrap'
-import FieldGroup, { FieldGroupProps, FieldGroupRenderProps } from './FieldGroup'
-import { FieldProps, FormikHandlers } from 'formik'
+import FieldGroup from './FieldGroupExperimental'
+import {
+  useField,
+  FormikHandlers,
+  useFormikContext,
+  FieldConfig,
+  FieldInputProps,
+  FormikProps
+} from 'formik'
 //@ts-ignore
 import isEqual from 'lodash/isEqual'
 
-import { convertOptionsFromChildren } from './Choice/helpers'
+import convertOptionsFromChildren from './Choice/convertOptionsFromChildren'
+import { useGlobalProps } from './useGlobalProps'
 
 interface IOption {
   value: string,
   text: string
   [key: string]: any
 }
-type OptionsArray = Array<IOption> | undefined
 
 interface OptionsProps {
-  options: OptionsArray,
+  options: IOption[],
   insertOption?: string
 }
 
@@ -41,111 +48,111 @@ const Options: React.FC<OptionsProps> = (props) => {
   }
 }
 
-const checkOptionAvailable = (value: string, options: OptionsArray) => {
-  if (options) {
-    const option = options.find(o => o.value === value)
-    return !!option
-  } else {
-    return false
-  }
+const checkOptionAvailable = (value: string, options: IOption[]) => {
+  return options ? !!options.find(o => o.value === value) : false
 }
 
 const getSelectedText = (value: any, options: IOption[]) => {
   const opt = options.find(o => o.value === value)
-  if (opt) {
-    return opt.text
-  }
-  return value
+  return opt ? opt.text : value
 }
 
-interface SelectProps extends Omit<FieldGroupProps, 'render'>, Omit<InputProps, 'onChange'> {
-  onChange?: (value: any, formikOnChange: FormikHandlers['handleChange'], formik: FieldProps) => void
+interface FormikBag<Value = any> {
+  field: FieldInputProps<Value>
+  form: FormikProps<Value>
+}
+
+interface SelectProps extends Omit<InputProps, 'onChange'>, Omit<FieldConfig, keyof InputProps> {
+  onChange?: (value: any, formikOnChange: FormikHandlers['handleChange'], formik: FormikBag) => void
   filtered?: IOption[]
-  inputProps?: Object
+  fieldConfig?: Object
 }
 
 const Select: React.FC<SelectProps> = (props) => {
-  const { options, } = props
+  const [ field, meta ]  = useField<any>({
+    validate: props.validate,
+    name: props.name
+  })
+  const form = useFormikContext<any>()
+  const globalProps = useGlobalProps()
+  const formikBag = {
+    field,
+    form,
+    meta
+  }
+
+  const { 
+    options,
+    label,
+    onChange,
+    inputProps,
+    validate, 
+    ...rest 
+  } = props
   const baseOptions = convertOptionsFromChildren<IOption>(options, props.children)
   const filteredOptions = props.filtered || baseOptions
+  const [ insertOption , setInsertOption ] = useState()
 
+  const filteredOptionsRef = useRef<IOption[] | undefined>(undefined)
+  useEffect(() => {
+    if(!isEqual(filteredOptions, filteredOptionsRef.current)) {
+      filteredOptionsRef.current = filteredOptions
+      const filteredCheck = checkOptionAvailable(field.value, filteredOptions)
+      const baseCheck = field.value === undefined || checkOptionAvailable(field.value, baseOptions)
+      if (Array.isArray(filteredOptions) && filteredOptions.length && !filteredCheck && baseCheck) {
+        const first = filteredOptions[0].value
+        form.setFieldValue(props.name, first)
+      }
+    }
+  })
+
+  useEffect(() => {
+    const baseCheck = checkOptionAvailable(field.value, baseOptions)
+    if (field.value !== undefined && !baseCheck) {
+      setInsertOption(field.value)
+    }
+  }, [])
+
+  const plaintext = props.plaintext !== undefined
+    ? props.plaintext
+    : globalProps.plaintext
+  const invalid = meta.error !== undefined && meta.touched 
   return (
-    <FieldGroup 
-      name={props.name}
-      label={props.label}
-      validate={props.validate}
-      formText={props.formText}
-      FormGroup={props.FormGroup}
-      render={(fieldProps: FieldGroupRenderProps) => { 
-        const [ insertOption , setInsertOption ] = useState()
-        const { formik } = fieldProps
-        const { field } = formik
-
-        const filteredOptionsRef = useRef<IOption[] | undefined>(undefined)
-        useEffect(() => {
-          if(!isEqual(filteredOptions, filteredOptionsRef.current)) {
-            filteredOptionsRef.current = filteredOptions
-            const filteredCheck = checkOptionAvailable(field.value, filteredOptions)
-            const baseCheck = field.value === undefined || checkOptionAvailable(field.value, baseOptions)
-            if (Array.isArray(filteredOptions) && filteredOptions.length && !filteredCheck && baseCheck) {
-              const first = filteredOptions[0].value
-              formik.form.setFieldValue(formik.field.name, first)
+    <FieldGroup field={field} meta={meta} label={label} invalid={invalid}>
+      <Input
+        {...field}
+        {...rest}
+        type='select'
+        data-testid={props['data-testid'] || 'field-input'}
+        invalid={props.invalid || invalid}
+        plaintext={plaintext}
+        readOnly={plaintext}
+        value={plaintext ? getSelectedText(field.value, filteredOptions) : field.value}
+        onChange={(e) => {
+          const { value } = e.target
+          const formikOnChange = (value: any) => {
+            if (field.name) {
+              form.setFieldValue(field.name, value)
             }
           }
-        })
-
-        useEffect(() => {
-          const baseCheck = checkOptionAvailable(field.value, baseOptions)
-          if (field.value !== undefined && !baseCheck) {
-            setInsertOption(field.value)
+          if (typeof props.onChange === 'function') {
+            props.onChange(value, formikOnChange, formikBag)
+          } else {
+            formikOnChange(value)
           }
-        }, [])
-
-        return (
-          <Input
-            {...formik.field}
-            data-testid={fieldProps['data-testid']}
-            disabled={props.disabled}
-            readOnly={props.plaintext}
-            type='select'
-            size={props.size}
-            bsSize={props.bsSize}
-            valid={props.valid}
-            invalid={props.invalid || fieldProps.invalid}
-            tag={props.tag}
-            innerRef={props.innerRef} 
-            plaintext={props.plaintext}
-            addon={props.addon}
-            className={props.className}
-            cssModule={props.cssModule}
-            value={props.plaintext ? getSelectedText(formik.field.value, filteredOptions) : formik.field.value}
-            onChange={(e) => {
-              const { value } = e.target
-              const formikOnChange = (value: any) => {
-                if (props.name) {
-                  fieldProps.formik.form.setFieldValue(props.name, value)
-                }
-              }
-              if (typeof props.onChange === 'function') {
-                props.onChange(value, formikOnChange, fieldProps.formik)
-              } else {
-                formikOnChange(value)
-              }
-            }}
-            {...props.inputProps}
-          >
-            {!props.plaintext
-              ? (
-                <Options
-                  options={filteredOptions}
-                  insertOption={insertOption}
-                />
-              ) : null
-            }
-          </Input>
-        )
-      }}
-    />
+        }}
+        {...inputProps}
+      >
+        {!plaintext
+          ? (
+            <Options
+              options={filteredOptions}
+              insertOption={insertOption}
+            />
+          ) : null
+        }
+      </Input>
+    </FieldGroup>
   )
 }
 

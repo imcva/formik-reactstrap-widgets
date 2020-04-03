@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  act,
   render,
   fireEvent,
   cleanup,
@@ -8,8 +9,7 @@ import {
 import { Formik, Form } from 'formik'
 import 'jest-dom/extend-expect'
 
-import Choice from '../Choice'
-import Option from '../Choice/Option'
+import { Radio } from '../Choice'
 
 afterEach(cleanup)
 
@@ -41,11 +41,11 @@ test('Basic Radio With Children', async () => {
       }}
       onSubmit={onSubmit}
     >
-      <Choice name='color' label={labelText}>
-        <Option value='red'>Red</Option>
-        <Option value='blue'>Blue</Option>
-        <Option value='green'>Green</Option>
-      </Choice>
+      <Radio name='color' label={labelText}>
+        <option value='red'>Red</option>
+        <option value='blue'>Blue</option>
+        <option value='green'>Green</option>
+      </Radio>
     </FormWrapper>
   )
   const label = getByTestId('input-label')
@@ -81,7 +81,7 @@ test('Basic Radio With Options Prop', async () => {
       }}
       onSubmit={onSubmit}
     >
-      <Choice name='color' options={options} />
+      <Radio name='color' options={options} />
     </FormWrapper>
   )
   const red = getByLabelText('Red')
@@ -115,7 +115,7 @@ test('Button Radio With Options Prop', async () => {
       }}
       onSubmit={onSubmit}
     >
-      <Choice button name='color' options={options} />
+      <Radio button name='color' options={options} />
     </FormWrapper>
   )
   const red = getByTestId('color-red')
@@ -147,7 +147,7 @@ test('All Disabled Radios', async () => {
         color: 'green'
       }}
     >
-      <Choice disabled name='color' options={options} />
+      <Radio disabled name='color' options={options} />
     </FormWrapper>
   )
   const red = getByTestId('color-red')
@@ -170,7 +170,7 @@ test('All Plaintext Radios', async () => {
         color: 'green'
       }}
     >
-      <Choice plaintext name='color' options={options} />
+      <Radio plaintext name='color' options={options} />
     </FormWrapper>
   )
   const red = getByTestId('color-red')
@@ -193,7 +193,7 @@ test('Single Disabled Radios', async () => {
         color: 'green'
       }}
     >
-      <Choice name='color' options={options} />
+      <Radio name='color' options={options} />
     </FormWrapper>
   )
   const red = getByTestId('color-red')
@@ -216,7 +216,7 @@ test('Single Plaintext Radios', async () => {
         color: 'green'
       }}
     >
-      <Choice name='color' options={options} />
+      <Radio name='color' options={options} />
     </FormWrapper>
   )
   const red = getByTestId('color-red')
@@ -241,7 +241,7 @@ test('Radio Validation', async () => {
         }} 
         onSubmit={onSubmit}
       >
-      <Choice name='color' options={options} validate={validateRequired} />
+      <Radio name='color' options={options} validate={validateRequired} />
     </FormWrapper>
   )
   const form = getByTestId('form')
@@ -249,37 +249,6 @@ test('Radio Validation', async () => {
   await wait(() => {
     const invalidText = getByTestId('invalid-text')
     expect(invalidText).toBeVisible()
-  })
-})
-
-test('Radio Validation', async () => {
-  const onSubmit = jest.fn()
-  const options = [
-    {value: true, text: 'True'},
-    {value: false, text: 'False'},
-  ]
-  const { getByTestId } = render(
-      <FormWrapper 
-        initialValues={{
-          bool: false
-        }} 
-        onSubmit={onSubmit}
-      >
-      <Choice name='bool' button group options={options} />
-    </FormWrapper>
-  )
-  const trueButton = getByTestId('bool-true')
-  const falseButton = getByTestId('bool-false')
-  const form = getByTestId('form')
-  expect(trueButton).not.toHaveClass('active')
-  expect(falseButton).toHaveClass('active')
-  fireEvent.click(trueButton)
-  expect(trueButton).toHaveClass('active')
-  expect(falseButton).not.toHaveClass('active')
-  fireEvent.submit(form)
-  await wait(() => {
-    expect(onSubmit).toHaveBeenCalledTimes(1)
-    expect(onSubmit).toHaveBeenCalledWith({ bool: true }, expect.any(Object))
   })
 })
 
@@ -291,11 +260,11 @@ test('Basic Radio With Children', async () => {
       }}
       onSubmit={() => null}
     >
-      <Choice name='color' label='Color: ' inputProps={{alt: 'Test Alt'}}>
+      <Radio name='color' label='Color: ' alt='Test Alt'>
         <Option value='red'>Red</Option>
         <Option value='blue'>Blue</Option>
         <Option value='green'>Green</Option>
-      </Choice>
+      </Radio>
     </FormWrapper>
   )
   const blue = getByTestId('color-blue')
@@ -311,14 +280,16 @@ test('Custom global onChange with basic radio', async () => {
       }}
       onSubmit={() => null}
     >
-      <Choice name='color' label='Color: ' onChange={(value, formikOnChange) => {
+      <Radio name='color' label='Color: ' onChange={(value, [ , , helpers ]) => {
         changeFunction(value) 
-        formikOnChange(value)
+        act(() => {
+          helpers.setValue(value)
+        })
       }}>
         <Option value='red' label='Red'>Red</Option>
         <Option value='blue' label='Blue'>Blue</Option>
         <Option value='green' label='Green'>Green</Option>
-      </Choice>
+      </Radio>
     </FormWrapper>
   )
   const red = getByTestId('color-red')
@@ -328,11 +299,13 @@ test('Custom global onChange with basic radio', async () => {
   expect(blue.checked).not.toBeTruthy()
   expect(green.checked).toBeTruthy()
   fireEvent.click(blue)
-  expect(changeFunction).toHaveBeenCalledTimes(1)
-  expect(changeFunction).toHaveBeenCalledWith('blue')
-  expect(red.checked).not.toBeTruthy()
-  expect(blue.checked).toBeTruthy()
-  expect(green.checked).not.toBeTruthy()
+  await wait(() => {
+    expect(changeFunction).toHaveBeenCalledTimes(1)
+    expect(changeFunction).toHaveBeenCalledWith('blue')
+    expect(red.checked).not.toBeTruthy()
+    expect(blue.checked).toBeTruthy()
+    expect(green.checked).not.toBeTruthy()
+  })
 })
 
 test('Custom global onChange with button radio', async () => {
@@ -344,14 +317,16 @@ test('Custom global onChange with button radio', async () => {
       }}
       onSubmit={() => null}
     >
-      <Choice button name='color' label='Color: ' onChange={(value, formikOnChange) => {
+      <Radio button name='color' label='Color: ' onChange={(value, [ , , helpers ]) => {
         changeFunction(value) 
-        formikOnChange(value)
+        act(() => {
+          helpers.setValue(value)
+        })
       }}>
         <Option value='red' label='Red'>Red</Option>
         <Option value='blue' label='Blue'>Blue</Option>
         <Option value='green' label='Green'>Green</Option>
-      </Choice>
+      </Radio>
     </FormWrapper>
   )
   const red = getByTestId('color-red')
@@ -361,87 +336,11 @@ test('Custom global onChange with button radio', async () => {
   expect(blue).not.toHaveClass('active')
   expect(green).toHaveClass('active')
   fireEvent.click(blue)
-  expect(changeFunction).toHaveBeenCalledTimes(1)
-  expect(changeFunction).toHaveBeenCalledWith('blue')
-  expect(red).not.toHaveClass('active')
-  expect(blue).toHaveClass('active')
-  expect(green).not.toHaveClass('active')
-})
-
-test('Input with FormText', async () => {
-  const onSubmit = jest.fn()
-  const text = 'Select your Favorite Color.'
-  const { getByTestId } = render(
-    <FormWrapper 
-      initialValues={{
-        color: 'green'
-      }}
-      onSubmit={onSubmit}
-    >
-      <Choice name='color' formText={text} label='Color'>
-        <Option value='red'>Red</Option>
-        <Option value='blue'>Blue</Option>
-        <Option value='green'>Green</Option>
-      </Choice>
-    </FormWrapper>
-  )
-  const formText = getByTestId('form-text')
-  expect(formText.innerHTML).toBe(text)
-})
-
-test('Without FormGroup', async () => {
-  const { queryByTestId } = render(
-    <FormWrapper 
-      initialValues={{
-        color: {
-          green: true
-        }
-      }}
-    >
-      <Choice FormGroup={false} name='color' label='Color'>
-        <Option value='red'>Red</Option>
-        <Option value='blue'>Blue</Option>
-        <Option value='green'>Green</Option>
-      </Choice>
-    </FormWrapper>
-  )
-  expect(queryByTestId('FormGroup')).toBeNull();
-})
-
-test('With FormGroup Explicitly', async () => {
-  const { queryByTestId } = render(
-    <FormWrapper 
-      initialValues={{
-        color: {
-          green: true
-        }
-      }}
-    >
-      <Choice label='Color' name='color' FormGroup={true}>
-        <Option value='red'>Red</Option>
-        <Option value='blue'>Blue</Option>
-        <Option value='green'>Green</Option>
-      </Choice>
-    </FormWrapper>
-  )
-  expect(queryByTestId('FormGroup')).toBeTruthy();
-})
-
-test('With FormGroup Default', async () => {
-  const { queryByTestId } = render(
-    <FormWrapper 
-      initialValues={{
-        color: {
-          green: true
-        }
-      }}
-    >
-      <Choice label='Color'>
-        <Option value='red'>Red</Option>
-        <Option value='blue'>Blue</Option>
-        <Option value='green'>Green</Option>
-      </Choice>
-    </FormWrapper>
-  )
-  expect(queryByTestId('FormGroup')).toBeTruthy();
+  await wait(() => {
+    expect(changeFunction).toHaveBeenCalledTimes(1)
+    expect(changeFunction).toHaveBeenCalledWith('blue')
+    expect(red).not.toHaveClass('active')
+    expect(blue).toHaveClass('active')
+    expect(green).not.toHaveClass('active')
+  })
 })

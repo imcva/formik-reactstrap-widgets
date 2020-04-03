@@ -1,12 +1,9 @@
 {
   "name": "formik-reactstrap-widgets",
-  "version": "0.11.2",
+  "version": "0.8.0",
   "description": "Bootstrap form fields and widgets for Formik",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
-  "files": [
-    "dist"
-  ],
   "keywords": [
     "react",
     "bootstrap",
@@ -19,8 +16,7 @@
     "build-storybook": "build-storybook",
     "storybook": "start-storybook -p 6006",
     "test": "jest",
-    "preversion": "yarn build",
-    "postversion": "yarn publish --non-interactive"
+    "version": "npm run build"
   },
   "author": "Brandon Might",
   "license": "ISC",
@@ -29,14 +25,11 @@
     "@babel/preset-env": "^7.5.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.6.0",
-    "@rollup/plugin-commonjs": "^11.0.1",
-    "@rollup/plugin-node-resolve": "^7.0.0",
-    "@rollup/plugin-typescript": "^2.1.0",
     "@storybook/addon-actions": "^5.1.9",
     "@storybook/addon-links": "^5.1.9",
     "@storybook/addons": "^5.1.9",
     "@storybook/react": "^5.1.9",
-    "@testing-library/react": "^8.0.4",
+    "@testing-library/react": "^9.3.3",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.7",
     "@types/react": "^16.9.3",
@@ -49,31 +42,31 @@
     "babel-loader": "^8.0.6",
     "bootstrap": "^4.3.1",
     "css-loader": "^3.1.0",
-    "formik": "^1.5.7",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^24.9.0",
     "jest-dom": "^3.5.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-testing-library": "^8.0.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "formik": "^2.0.6",
     "reactstrap": "^8.0.1",
-    "rollup": "^1.29.0",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-postcss": "^2.0.3",
-    "rollup-plugin-typescript2": "^0.25.3",
+    "rollup-plugin-typescript": "^1.0.1",
+    "rollup-plugin-typescript2": "^0.24.2",
     "storybook": "^1.0.0",
     "style-loader": "^0.23.1",
     "ts-jest": "^24.1.0",
     "tslib": "^1.10.0",
     "typescript": "^3.6.3",
     "webpack": "^4.35.2",
-    "webpack-cli": "^3.3.6",
-    "yup": "^0.28.1"
+    "webpack-cli": "^3.3.6"
   },
   "peerDependencies": {
     "bootstrap": "^4.3.1",
-    "formik": "^1.5.7",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "formik": "^2.0.6",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
     "reactstrap": "^8.0.0"
   },
   "dependencies": {
@@ -81,9 +74,11 @@
     "@fortawesome/free-regular-svg-icons": "^5.10.2",
     "@fortawesome/free-solid-svg-icons": "^5.10.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
+    "@types/classnames": "^2.2.9",
     "classnames": "^2.2.6",
     "lodash": "^4.17.15",
-    "react-datepicker": "^2.8.0"
+    "react-datepicker": "^2.8.0",
+    "rollup-plugin-commonjs": "^10.0.1"
   },
   "jest": {
     "transform": {

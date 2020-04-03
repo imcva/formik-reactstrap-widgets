@@ -75,17 +75,16 @@ test('Test First Value and Options Reset', async () => {
     {value: 'green', text: 'Green', primary: 'yellow'}
   ]
   const { getByTestId } = render(
-    <Formik 
-      onSubmit={onSubmit}
-      render={props => {
+    <Formik onSubmit={onSubmit} initialValues={{}}>
+      {(props) => {
         return (
           <Form data-testid='form'>
             <Select name='primary' options={options1} inputProps={{'data-testid': 'primary-input'}} />
-            <Select name='secondary' options={options2} filtered={options2.filter(opt => opt.primary === props.values.primary)} inputProps={{'data-testid': 'secondary-input'}} />
+            <Select name='secondary' options={options2} filtered={options2.filter(opt => props.values ? opt.primary === props.values.primary : false)} inputProps={{'data-testid': 'secondary-input'}} />
           </Form>
         )
       }}
-    />
+    </Formik>
   )
   const form = getByTestId('form')
   const primary = getByTestId('primary-input')
@@ -248,19 +247,18 @@ test('Custom onChange Event', async () => {
     {value: 'blue', text: 'Blue'},
   ]
   const { getByTestId } = render(
-    <Formik 
-      onSubmit={onSubmit}
-      render={props => {
+    <Formik onSubmit={onSubmit} initialValues={{}} >
+      {props => {
         return (
           <Form data-testid='form'>
             <Select name='primary' onChange={(value, formikOnChange) => {
               onChangeMethod(value)
               formikOnChange(value)
-            }} options={options} inputProps={{'data-testid': 'primary-input'}} />
+            }} options={options} inputProps={{ 'data-testid': 'primary-input' }} />
           </Form>
         )
       }}
-    />
+    </Formik>
   )
   const form = getByTestId('form')
   const primary = getByTestId('primary-input')
@@ -272,76 +270,4 @@ test('Custom onChange Event', async () => {
     expect(onSubmit).toHaveBeenCalledTimes(1)
     expect(onSubmit).toHaveBeenCalledWith({ primary: 'blue' }, expect.any(Object))
   })
-})
-
-test('Input with FormText', async () => {
-  const onSubmit = jest.fn()
-  const text = 'Enter the E-Mail you used to sign up with.'
-  const { getByTestId } = render(
-    <FormWrapper 
-      initialValues={{
-        color: 'green'
-      }}
-      onSubmit={onSubmit}
-    >
-      <Select name='color' label='Select a Color' formText={text}>
-        <option value='red'>Red</option>
-        <option value='blue'>Blue</option>
-        <option value='green'>Green</option>
-      </Select>
-    </FormWrapper>
-  )
-  const formText = getByTestId('form-text')
-  expect(formText.innerHTML).toBe(text)
-})
-
-test('Without FormGroup', async () => {
-  const { queryByTestId } = render(
-    <FormWrapper 
-      initialValues={{
-        color: 'green'
-      }}
-    >
-      <Select name='color' label='Select a Color' FormGroup={false}>
-        <option value='red'>Red</option>
-        <option value='blue'>Blue</option>
-        <option value='green'>Green</option>
-      </Select>
-    </FormWrapper>
-  )
-  expect(queryByTestId('FormGroup')).toBeNull();
-})
-
-test('With FormGroup Explicitly', async () => {
-  const { queryByTestId } = render(
-    <FormWrapper 
-      initialValues={{
-        color: 'green'
-      }}
-    >
-      <Select name='color' label='Select a Color' FormGroup={true}>
-        <option value='red'>Red</option>
-        <option value='blue'>Blue</option>
-        <option value='green'>Green</option>
-      </Select>
-    </FormWrapper>
-  )
-  expect(queryByTestId('FormGroup')).toBeTruthy();
-})
-
-test('With FormGroup Default', async () => {
-  const { queryByTestId } = render(
-    <FormWrapper 
-      initialValues={{
-        color: 'green'
-      }}
-    >
-      <Select name='color' label='Select a Color'>
-        <option value='red'>Red</option>
-        <option value='blue'>Blue</option>
-        <option value='green'>Green</option>
-      </Select>
-    </FormWrapper>
-  )
-  expect(queryByTestId('FormGroup')).toBeTruthy();
 })

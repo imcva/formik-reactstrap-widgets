@@ -49,7 +49,6 @@ storiesOf('DatePicker Input', module)
     </Container>
   ))
   .add('Basic Date Only', () => <DatePicker name='testInput' label='Test Input' />)
-  .add('FormText', () => <DatePicker name='testInput' label='Test Input' formText='This is a FormText label' />)
   .add('Date and Time', () => (
     <DatePicker 
       name='testInput'
