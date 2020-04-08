@@ -34,14 +34,18 @@ const useFieldArray = (name: string) => {
     return removedItem
   }, [field.name, setValue])
 
-  const arrayhelpers: ArrayHelpers = useMemo(() => {
-    return fieldArray.current.map((value: any, index: number) => {
-      return {
-        value,
-        getName: (name: string) => `${field.name}[${index}].${name}`,
-        remove: () => remove(index)
-      }
-    })
+  const arrayhelpers: ArrayHelpers[] = useMemo(() => {
+    if (Array.isArray(fieldArray.current)) {
+      return fieldArray.current.map((value: any, index: number) => {
+        return {
+          value,
+          getName: (name: string) => `${field.name}[${index}].${name}`,
+          remove: () => remove(index)
+        }
+      })
+    } else {
+      return []
+    }
   }, [field.name, add, remove])
 
   return [
