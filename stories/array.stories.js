@@ -53,9 +53,7 @@ storiesOf('Arrays', module)
           <Col sm={4} className='my-2'>
             <Formik
               onSubmit={action('form-submitted')}
-              initialValues={{
-                statuses: []
-              }}
+              initialValues={{}}
             >
               {props => {
                 return (

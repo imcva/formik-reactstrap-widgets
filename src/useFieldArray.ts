@@ -24,7 +24,11 @@ const useFieldArray = (name: string): useFieldArrayReturn => {
   const fieldArray = useRef(field.value)
 
   useEffect(() => {
-    fieldArray.current = field.value
+    if (Array.isArray(field.value)) {
+      fieldArray.current = field.value
+    } else {
+      helpers.setValue([])
+    }
   }, [field.value])
 
   const add = useCallback(value => {
