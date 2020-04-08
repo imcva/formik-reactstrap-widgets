@@ -12,7 +12,7 @@ import {
 import 'bootstrap/dist/css/bootstrap.css'
 
 const Statuses = () => {
-  const [, , , statuses, statusHelpers] = useFieldArray('statuses')
+  const [statuses, add ] = useFieldArray('statuses')
   return (
     <>
       <Row>
@@ -22,7 +22,7 @@ const Statuses = () => {
         <Col>
           <Button
             onClick={() => {
-              statusHelpers.add({})
+              add({})
             }}
           >
             + Add
@@ -33,7 +33,7 @@ const Statuses = () => {
         return (
           <Row>
             <Col>
-              <Input name={item.buildName('name')} label='Name:' />
+              <Input name={item.getName('name')} label='Name:' />
             </Col>
             <Col xs={1}>
               <a onClick={() => item.remove()}>x</a>
@@ -58,7 +58,6 @@ storiesOf('Arrays', module)
               }}
             >
               {props => {
-                console.log(props.values)
                 return (
                   <Form>
                     <Statuses />

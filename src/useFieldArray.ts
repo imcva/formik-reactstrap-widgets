@@ -1,13 +1,24 @@
 import { useCallback, useMemo, useRef, useEffect } from 'react'
-import { useField } from 'formik'
-
+import { useField, FieldInputProps, FieldMetaProps, FieldHelperProps } from 'formik'
 interface ArrayHelpers {
   value: any,
   getName: (name: string) => string,
   remove: () => void
 }
 
-const useFieldArray = (name: string) => {
+type useFieldArrayReturn = [
+  ArrayHelpers[],
+  (value: any) => void,
+  (index: number) => any,
+  [
+    FieldInputProps<any>,
+    FieldMetaProps<any>,
+    FieldHelperProps<any>
+  ],
+]
+
+
+const useFieldArray = (name: string): useFieldArrayReturn => {
   const [ field, meta, helpers ] = useField(name)
   const { setValue } = helpers
   const fieldArray = useRef(field.value)
@@ -34,9 +45,9 @@ const useFieldArray = (name: string) => {
     return removedItem
   }, [field.name, setValue])
 
-  const arrayhelpers: ArrayHelpers[] = useMemo(() => {
+  const arrayhelpers = useMemo(() => {
     if (Array.isArray(fieldArray.current)) {
-      return fieldArray.current.map((value: any, index: number) => {
+      return fieldArray.current.map((value: any, index: number): ArrayHelpers => {
         return {
           value,
           getName: (name: string) => `${field.name}[${index}].${name}`,
@@ -49,14 +60,14 @@ const useFieldArray = (name: string) => {
   }, [field.name, add, remove])
 
   return [
-    field,
-    meta,
-    helpers,
     arrayhelpers,
-    {
-      add,
-      remove,
-    }
+    add,
+    remove,
+    [
+      field,
+      meta,
+      helpers
+    ],
   ]
 }
 
