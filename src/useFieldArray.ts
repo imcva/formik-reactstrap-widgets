@@ -1,6 +1,12 @@
 import { useCallback, useMemo, useRef, useEffect } from 'react'
 import { useField } from 'formik'
 
+interface ArrayHelpers {
+  value: any,
+  getName: (name: string) => string,
+  remove: () => void
+}
+
 const useFieldArray = (name: string) => {
   const [ field, meta, helpers ] = useField(name)
   const { setValue } = helpers
@@ -28,7 +34,7 @@ const useFieldArray = (name: string) => {
     return removedItem
   }, [field.name, setValue])
 
-  const arrayhelpers = useMemo(() => {
+  const arrayhelpers: ArrayHelpers = useMemo(() => {
     return fieldArray.current.map((value: any, index: number) => {
       return {
         value,
