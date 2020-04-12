@@ -76,3 +76,4 @@ const useFieldArray = (name: string): useFieldArrayReturn => {
 }
 
 export default useFieldArray
+export { ArrayHelpers, useFieldArrayReturn }
