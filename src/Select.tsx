@@ -66,7 +66,7 @@ interface SelectProps extends Omit<InputProps, 'onChange'>, Omit<FieldConfig, ke
   onChange?: (value: any, formikOnChange: FormikHandlers['handleChange'], formik: FormikBag) => void
   filtered?: IOption[]
   fieldConfig?: Object
-  InsertBlank: boolean | IOption
+  InsertBlank?: boolean | IOption
 }
 
 const Select: React.FC<SelectProps> = (props) => {
