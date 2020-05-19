@@ -66,6 +66,7 @@ interface SelectProps extends Omit<InputProps, 'onChange'>, Omit<FieldConfig, ke
   onChange?: (value: any, formikOnChange: FormikHandlers['handleChange'], formik: FormikBag) => void
   filtered?: IOption[]
   fieldConfig?: Object
+  InsertBlank: boolean | IOption
 }
 
 const Select: React.FC<SelectProps> = (props) => {
@@ -83,28 +84,64 @@ const Select: React.FC<SelectProps> = (props) => {
 
   const { 
     options,
+    filtered,
     label,
     onChange,
     inputProps,
     validate, 
+    InsertBlank,
     ...rest 
   } = props
-  const baseOptions = convertOptionsFromChildren<IOption>(options, props.children)
-  const filteredOptions = props.filtered || baseOptions
+  const opts = filtered || options
+  const baseOptions = convertOptionsFromChildren<IOption>(opts, props.children)
+  const [ filteredOptions, setFilteredOptions] = useState(baseOptions)
   const [ insertOption , setInsertOption ] = useState()
+  const [ blankInserted, setBlankInserted ] = useState(false)
+
+  /**
+   * Warn that the filtered prop is depreciated.
+   */
+  useEffect(() => {
+    if (filtered) {
+      console.warn('Filtered prop is deprecated on Select. Please only use the options prop.')
+    }
+  }, [filtered])
 
   const filteredOptionsRef = useRef<IOption[] | undefined>(undefined)
   useEffect(() => {
     if(!isEqual(filteredOptions, filteredOptionsRef.current)) {
       filteredOptionsRef.current = filteredOptions
-      const filteredCheck = checkOptionAvailable(field.value, filteredOptions)
-      const baseCheck = field.value === undefined || checkOptionAvailable(field.value, baseOptions)
-      if (Array.isArray(filteredOptions) && filteredOptions.length && !filteredCheck && baseCheck) {
-        const first = filteredOptions[0].value
+      let options = filteredOptions
+      if(InsertBlank === true && blankInserted === false) {
+        const newOptions = [...filteredOptions]
+        newOptions.unshift({ text: '', value: ''})
+        setFilteredOptions(newOptions)
+        setBlankInserted(true)
+        options = newOptions
+      } else if (InsertBlank && InsertBlank !== true && blankInserted === false) {
+        const newOptions = [...filteredOptions]
+        newOptions.unshift(InsertBlank)
+        setFilteredOptions(newOptions)
+        setBlankInserted(true)
+        options = newOptions
+      }
+
+      // Set first Option
+      const filteredCheck = checkOptionAvailable(field.value, options)
+      const baseCheck = field.value === undefined || checkOptionAvailable(field.value, options)
+      if (Array.isArray(options) && options.length && !filteredCheck && baseCheck) {
+        const first = options[0].value
         form.setFieldValue(props.name, first)
       }
     }
   })
+
+  const baseOptionsRef = useRef(baseOptions)
+  useEffect(() => {
+    if(!isEqual(baseOptions, baseOptionsRef.current)) {
+      setFilteredOptions(baseOptions)
+    }
+  }, [baseOptions])
 
   useEffect(() => {
     const baseCheck = checkOptionAvailable(field.value, baseOptions)

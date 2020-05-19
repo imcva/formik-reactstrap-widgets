@@ -271,3 +271,55 @@ test('Custom onChange Event', async () => {
     expect(onSubmit).toHaveBeenCalledWith({ primary: 'blue' }, expect.any(Object))
   })
 })
+
+test('Insert Blank - Default', async () => {
+  const onSubmit = jest.fn()
+  const options = [
+    {value: 'red', text: 'Red'},
+    {value: 'blue', text: 'Blue'},
+    {value: 'green', text: 'Green'}
+  ]
+  const { getByTestId, debug } = render(
+    <FormWrapper 
+      initialValues={{}}
+      onSubmit={onSubmit}
+    >
+      <Select name='blank' options={options} InsertBlank />
+    </FormWrapper>
+  )
+  const input = getByTestId('field-input')
+  const form = getByTestId('form')
+  expect(input.value).toBe('')
+  fireEvent.submit(form)
+  await wait(() => {
+    expect(onSubmit).toHaveBeenCalledTimes(1)
+    expect(onSubmit).toHaveBeenCalledWith({ blank: '' }, expect.any(Object))
+  })
+})
+
+test('Insert Blank - Default', async () => {
+  const onSubmit = jest.fn()
+  const options = [
+    {value: 'red', text: 'Red'},
+    {value: 'blue', text: 'Blue'},
+    {value: 'green', text: 'Green'}
+  ]
+  const { getByTestId, debug } = render(
+    <FormWrapper 
+      initialValues={{}}
+      onSubmit={onSubmit}
+    >
+      <Select name='blank' options={options} InsertBlank={{ text: '(Blank)', value: '', 'data-testid': 'option-blank'}} />
+    </FormWrapper>
+  )
+  const input = getByTestId('field-input')
+  const opt = getByTestId('option-blank')
+  const form = getByTestId('form')
+  expect(input.value).toBe('')
+  expect(opt.textContent).toBe('(Blank)')
+  fireEvent.submit(form)
+  await wait(() => {
+    expect(onSubmit).toHaveBeenCalledTimes(1)
+    expect(onSubmit).toHaveBeenCalledWith({ blank: '' }, expect.any(Object))
+  })
+})

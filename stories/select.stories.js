@@ -17,7 +17,6 @@ const validateRequired = (value) => {
 }
 
 const options = [
-  { value: '', text: 'Select a Color' },
   { value: 'red', text: 'Red' },
   { value: 'blue', text: 'Blue' },
   { value: 'green', text: 'Green' }
@@ -29,7 +28,6 @@ const options1 = [
   {value: 'blue', text: 'Blue'},
 ]
 const options2 = [
-  {value: '', text: ''},
   {value: 'orange', text: 'Orange', primary: 'red'},
   {value: 'purple', text: 'Purple', primary: 'blue'},
   {value: 'green', text: 'Green', primary: 'yellow'}
@@ -83,7 +81,7 @@ storiesOf('Select Input', module)
   )).add('Cascading Dropdown', (props) => (
     <>
       <Select name='primary' options={options1} />
-      <Select name='secondary' options={options2} filtered={options2.filter(opt => opt.primary === props.values.primary)} />
+      <Select name='secondary' options={options2.filter(opt => opt.primary === props.values.primary)} />
     </>
   )).add('Plaintext Dropdown', (props) => (
     <Select
@@ -100,4 +98,12 @@ storiesOf('Select Input', module)
       }} />
       <Input name='test' label='Color Choice' />
     </>
+  )).add('Insert Blank Option', (props) => (
+    <>
+      <h3>Default Insert Blank</h3>
+      <Select name='default-blank' label='Pick a Color' InsertBlank options={options} />
+      <h3>Custom Insert Blank</h3>
+      <Select name='custom-blank' label='Pick a Color' InsertBlank={{ text: '(Select an Option)', value: '', disabled: true }} options={options} />
+    </>
   ))
+
