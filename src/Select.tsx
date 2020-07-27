@@ -23,7 +23,7 @@ interface IOption {
 
 interface OptionsProps {
   options: IOption[],
-  insertOption?: string
+  insertOption?: IOption
 }
 
 const Options: React.FC<OptionsProps> = (props) => {
@@ -36,13 +36,13 @@ const Options: React.FC<OptionsProps> = (props) => {
       <>
         {opts}
         {insertOption
-          ? <option value={insertOption} disabled>{insertOption}</option>
+          ? <option value={insertOption.value} disabled>{insertOption.text}</option>
           : null
         }
       </>
     ) 
   } else if (insertOption) {
-    return (<option value={insertOption} disabled>{insertOption}</option>)
+    return (<option value={insertOption.value} disabled>{insertOption.text}</option>)
   } else {
     return null
   }
@@ -94,8 +94,8 @@ const Select: React.FC<SelectProps> = (props) => {
   } = props
   const opts = filtered || options
   const baseOptions = convertOptionsFromChildren<IOption>(opts, props.children)
-  const [ filteredOptions, setFilteredOptions] = useState(baseOptions)
-  const [ insertOption , setInsertOption ] = useState()
+  const [ filteredOptions, setFilteredOptions] = useState(baseOptions.filter(opt => opt.archived !== true))
+  const [ insertOption , setInsertOption ] = useState<IOption | undefined>()
   const [ blankInserted, setBlankInserted ] = useState(false)
 
   /**
@@ -143,16 +143,21 @@ const Select: React.FC<SelectProps> = (props) => {
     }
   }, [baseOptions])
 
+
   useEffect(() => {
-    const baseCheck = checkOptionAvailable(field.value, baseOptions)
-    if (field.value !== undefined && !baseCheck) {
-      setInsertOption(field.value)
+    const baseCheck = checkOptionAvailable(field.value, filteredOptions)
+    const archivedOpt = baseOptions.find(opt => opt.value === field.value)
+    if (field.value !== undefined && !baseCheck && archivedOpt) {
+      setInsertOption(archivedOpt)
+    } else if (field.value !== undefined && !baseCheck) {
+      setInsertOption({ value: field.value, text: field.value })
     }
   }, [])
 
   const plaintext = props.plaintext !== undefined
     ? props.plaintext
     : globalProps.plaintext
+
   const invalid = meta.error !== undefined && meta.touched 
   return (
     <FieldGroup field={field} meta={meta} label={label} invalid={invalid}>
@@ -162,8 +167,6 @@ const Select: React.FC<SelectProps> = (props) => {
         type='select'
         data-testid={props['data-testid'] || 'field-input'}
         invalid={props.invalid || invalid}
-        plaintext={plaintext}
-        readOnly={plaintext}
         value={plaintext ? getSelectedText(field.value, filteredOptions) : field.value}
         onChange={(e) => {
           const { value } = e.target

@@ -22,6 +22,12 @@ const options = [
   { value: 'green', text: 'Green' }
 ] 
 
+const optionsWithArchived = [
+  { value: 'red', text: 'Red' },
+  { value: 'blue', text: 'Blue', archived: true },
+  { value: 'green', text: 'Green' }
+] 
+
 const options1 = [
   {value: 'red', text: 'Red'},
   {value: 'yellow', text: 'Yellow'},
@@ -83,6 +89,12 @@ storiesOf('Select Input', module)
       <Select name='primary' options={options1} />
       <Select name='secondary' options={options2.filter(opt => opt.primary === props.values.primary)} />
     </>
+  )).add('Dropdown With Archived Options', (props) => (
+    <Select
+      options={optionsWithArchived}
+      name='color'
+      label='Select A Color: '
+    />
   )).add('Plaintext Dropdown', (props) => (
     <Select
       options={options}
