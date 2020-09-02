@@ -1,5 +1,6 @@
 import { useCallback, useMemo, useRef, useEffect } from 'react'
 import { useField, FieldInputProps, FieldMetaProps, FieldHelperProps } from 'formik'
+
 interface ArrayHelpers {
   value: any,
   getName: (name: string) => string,
@@ -24,11 +25,10 @@ const useFieldArray = (name: string): useFieldArrayReturn => {
   const fieldArray = useRef(field.value)
 
   useEffect(() => {
-    if (Array.isArray(field.value)) {
-      fieldArray.current = field.value
-    } else {
+    if (!Array.isArray(fieldArray.current)) {
       helpers.setValue([])
     }
+    fieldArray.current = field.value
   }, [field.value])
 
   const add = useCallback(value => {
@@ -50,8 +50,9 @@ const useFieldArray = (name: string): useFieldArrayReturn => {
   }, [field.name, setValue])
 
   const arrayhelpers = useMemo(() => {
-    if (Array.isArray(fieldArray.current)) {
-      return fieldArray.current.map((value: any, index: number): ArrayHelpers => {
+    console.log('updating array helpers', fieldArray.current, field.value)
+    if (Array.isArray(field.value)) {
+      return field.value.map((value: any, index: number): ArrayHelpers => {
         return {
           value,
           getName: (name: string) => `${field.name}[${index}].${name}`,
@@ -61,7 +62,7 @@ const useFieldArray = (name: string): useFieldArrayReturn => {
     } else {
       return []
     }
-  }, [field.name, add, remove])
+  }, [field.value, field.name, add, remove])
 
   return [
     arrayhelpers,
