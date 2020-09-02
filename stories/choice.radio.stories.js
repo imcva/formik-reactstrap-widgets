@@ -155,7 +155,7 @@ storiesOf('Radio Input', module)
   ))
   .add('Button Group Block', () => (
     <>
-      <Radio name='regularButtons' label='Regular Buttons:' button group block validate={validateRequired}>
+      <Radio name='regularButtons' label='Regular Buttons:' button group block validate={validateRequired} className={{'my-2': false}}>
         <option value='blue' color='info'>Blue</option>
         <option value='red' color='danger'>Red</option>
       </Radio>

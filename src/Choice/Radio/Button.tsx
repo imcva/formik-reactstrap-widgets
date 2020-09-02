@@ -5,7 +5,7 @@ import { FieldInputProps, FieldMetaProps, FieldHelperProps } from 'formik'
 import { RadioOption } from '../types'
 
 // @ts-ignore
-import className from 'classnames'
+import className from 'classnames/dedupe'
 
 interface ButtonProps extends Omit<StrapButtonProps, 'onChange'> {
   field: FieldInputProps<any>

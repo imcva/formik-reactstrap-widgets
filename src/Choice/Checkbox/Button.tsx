@@ -5,7 +5,7 @@ import { useField } from 'formik'
 import { CheckboxOption } from '../types'
 
 // @ts-ignore
-import className from 'classnames'
+import className from 'classnames/dedupe'
 
 interface ButtonProps  extends CheckboxOption {}
 

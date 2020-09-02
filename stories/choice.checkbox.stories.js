@@ -130,14 +130,14 @@ storiesOf('Checkbox Input', module)
   .add('Buttons w/ Validation', () => (
     <>
       <Checkbox label='Regular Buttons:' multiple button validate={validateRequired}>
-        <option name='regular-blue' value='blue' color='info' className='mx-1'>Blue</option>
-        <option name='regular-green' value='green' color='info' className='mx-1'>Green</option>
-        <option name='regular-red' value='red' color='danger' className='mx-1'>Red</option>
+        <option name='regular-blue' value='blue' color='info' className={{'mx-1': true, 'my-2': false}}>Blue</option>
+        <option name='regular-green' value='green' color='info' className={{'mx-1': true, 'my-2': false}}>Green</option>
+        <option name='regular-red' value='red' color='danger' className={{'mx-1': true, 'my-2': false}}>Red</option>
       </Checkbox>
       <Checkbox label='Group Buttons:' multiple button group validate={validateRequired}>
-        <option name='group-blue' value='blue' color='info'>Blue</option>
-        <option name='group-green' value='green' color='info'>Green</option>
-        <option name='group-red' value='red' color='danger'>Red</option>
+        <option name='group-blue' value='blue' color='info' className={{'my-2': false}}>Blue</option>
+        <option name='group-green' value='green' color='info' className={{'my-2': false}}>Green</option>
+        <option name='group-red' value='red' color='danger' className={{'my-2': false}}>Red</option>
       </Checkbox>
       <Checkbox label='Block Buttons:' multiple button block validate={validateRequired}>
         <option name='block-blue' value='blue' color='info' className='mx-1'>Blue</option>
