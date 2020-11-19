@@ -75,7 +75,7 @@ const Select: React.FC<SelectProps> = (props) => {
     name: props.name
   })
   const form = useFormikContext<any>()
-  const globalProps = useGlobalProps()
+  const { globalProps } = useGlobalProps()
   const formikBag = {
     field,
     form,
@@ -181,6 +181,7 @@ const Select: React.FC<SelectProps> = (props) => {
             formikOnChange(value)
           }
         }}
+        plaintext={plaintext}
         {...inputProps}
       >
         {!plaintext

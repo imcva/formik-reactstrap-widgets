@@ -8,6 +8,7 @@ import convertOptionsFromChildren from '../convertOptionsFromChildren'
 import { RadioOption } from '../types'
 import Inputs from './Inputs'
 import Buttons from './Buttons'
+import { useGlobalProps } from '../../useGlobalProps'
 
 interface RadioProps extends FieldConfig, Omit<InputProps, 'onChange'> {
   options?: RadioOption[]
@@ -24,6 +25,7 @@ const Radio: React.FC<RadioProps> = (props) => {
     name: name,
     validate: validate
   })
+  const { globalProps } = useGlobalProps()
   return (
     <FieldGroup
       label={label}
@@ -37,6 +39,7 @@ const Radio: React.FC<RadioProps> = (props) => {
             field={field}
             meta={meta}
             helpers={helpers}
+            plaintext={globalProps.plaintext}
             {...rest}
           />
         ) : (
@@ -45,6 +48,7 @@ const Radio: React.FC<RadioProps> = (props) => {
             field={field}
             meta={meta}
             helpers={helpers}
+            plaintext={globalProps.plaintext}
             {...rest}
           />
         )

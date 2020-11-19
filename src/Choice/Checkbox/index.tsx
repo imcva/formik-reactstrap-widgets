@@ -7,6 +7,7 @@ import convertOptionsFromChildren from '../convertOptionsFromChildren'
 import { CheckboxOption } from '../types'
 import Inputs from './Inputs'
 import Buttons from './Buttons'
+import { useGlobalProps } from '../../useGlobalProps'
 
 interface CheckboxProps extends Omit<InputProps, 'onChange'> {
   button?: boolean
@@ -18,6 +19,7 @@ interface CheckboxProps extends Omit<InputProps, 'onChange'> {
 const Checkbox: React.FC<CheckboxProps> = (props) => {
   const { label, button, options, children, ...rest } = props
   const opts = convertOptionsFromChildren<CheckboxOption>(options, children)
+  const { globalProps } = useGlobalProps()
   return (
     <FormGroup>
       {label !== undefined
@@ -27,11 +29,13 @@ const Checkbox: React.FC<CheckboxProps> = (props) => {
       { button
         ? (
           <Buttons 
+            plaintext={globalProps.plaintext}
             {...rest}
             options={opts}
           />
         ): (
           <Inputs 
+            plaintext={globalProps.plaintext}
             {...rest}
             options={opts}
           />
