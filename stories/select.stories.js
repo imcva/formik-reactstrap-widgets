@@ -25,6 +25,7 @@ const options = [
 const optionsWithArchived = [
   { value: 'red', text: 'Red' },
   { value: 'blue', text: 'Blue', archived: true },
+  { value: 'pink', text: 'Pink', archived: true },
   { value: 'green', text: 'Green' }
 ] 
 
@@ -35,8 +36,9 @@ const options1 = [
 ]
 const options2 = [
   {value: 'orange', text: 'Orange', primary: 'red'},
+  {value: 'pink', text: 'Pink', primary: 'red'},
   {value: 'purple', text: 'Purple', primary: 'blue'},
-  {value: 'green', text: 'Green', primary: 'yellow'}
+  {value: 'green', text: 'Green',   primary: 'yellow'}
 ]
 
 storiesOf('Select Input', module)
@@ -83,6 +85,7 @@ storiesOf('Select Input', module)
       validate={validateRequired}
       name='color'
       label='Select A Color: '
+      InsertBlank
     />
   )).add('Cascading Dropdown', (props) => (
     <>

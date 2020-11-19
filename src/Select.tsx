@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useMemo } from 'react'
 import { Input, InputProps } from 'reactstrap'
 import FieldGroup from './FieldGroupExperimental'
 import {
@@ -27,7 +27,7 @@ interface OptionsProps {
 }
 
 const Options: React.FC<OptionsProps> = (props) => {
-  const { options, insertOption } = props
+  const { options } = props
   if (Array.isArray(options) && options.length) {
     const opts = options.map((opt, index) => {
       return (<option {...opt} key={index}>{opt.text}</option>)
@@ -35,21 +35,11 @@ const Options: React.FC<OptionsProps> = (props) => {
     return (
       <>
         {opts}
-        {insertOption
-          ? <option value={insertOption.value} disabled>{insertOption.text}</option>
-          : null
-        }
       </>
     ) 
-  } else if (insertOption) {
-    return (<option value={insertOption.value} disabled>{insertOption.text}</option>)
   } else {
     return null
   }
-}
-
-const checkOptionAvailable = (value: string, options: IOption[]) => {
-  return options ? !!options.find(o => o.value === value) : false
 }
 
 const getSelectedText = (value: any, options: IOption[]) => {
@@ -90,13 +80,45 @@ const Select: React.FC<SelectProps> = (props) => {
     inputProps,
     validate, 
     InsertBlank,
+    children,
     ...rest 
   } = props
-  const opts = filtered || options
-  const baseOptions = convertOptionsFromChildren<IOption>(opts, props.children)
-  const [ filteredOptions, setFilteredOptions] = useState(baseOptions.filter(opt => opt.archived !== true))
-  const [ insertOption , setInsertOption ] = useState<IOption | undefined>()
-  const [ blankInserted, setBlankInserted ] = useState(false)
+  const { value } = field
+  const base = filtered || options
+
+  const originalValue = useRef(value);
+  const opts = useMemo(() => {
+    const converted = convertOptionsFromChildren<IOption>(base, children)
+    const lessArchived = converted.filter((o) => o.archived !== true);
+    const baseValue = converted.find((o) => o.value === originalValue.current);
+    const nonArchivedValue = lessArchived.find(
+      (o) => o.value === originalValue.current
+    );
+    if (originalValue.current !== undefined && originalValue.current !== "") {
+      if (baseValue && !nonArchivedValue) {
+        lessArchived.push({ ...baseValue, disabled: true });
+      } else if (!baseValue && !nonArchivedValue) {
+        lessArchived.push({
+          disabled: true,
+          text: originalValue.current,
+          value: originalValue.current
+        });
+      }
+    }
+    if (InsertBlank === true) {
+      lessArchived.unshift({ text: "", value: "" });
+    } else if (typeof InsertBlank === 'object') {
+      lessArchived.unshift(InsertBlank);
+    }
+    return lessArchived;
+  }, [base, children, InsertBlank, originalValue]) 
+
+  useEffect(() => {
+    if(opts.find(o => o.value === value) === undefined) {
+      console.log('Value not in opts', { new: opts[0].value, opts })
+      form.setFieldValue(field.name, opts[0].value)
+    }
+  }, [opts, value, form])
 
   /**
    * Warn that the filtered prop is depreciated.
@@ -106,53 +128,6 @@ const Select: React.FC<SelectProps> = (props) => {
       console.warn('Filtered prop is deprecated on Select. Please only use the options prop.')
     }
   }, [filtered])
-
-  const filteredOptionsRef = useRef<IOption[] | undefined>(undefined)
-  useEffect(() => {
-    if(!isEqual(filteredOptions, filteredOptionsRef.current)) {
-      filteredOptionsRef.current = filteredOptions
-      let options = filteredOptions
-      if(InsertBlank === true && blankInserted === false) {
-        const newOptions = [...filteredOptions]
-        newOptions.unshift({ text: '', value: ''})
-        setFilteredOptions(newOptions)
-        setBlankInserted(true)
-        options = newOptions
-      } else if (InsertBlank && InsertBlank !== true && blankInserted === false) {
-        const newOptions = [...filteredOptions]
-        newOptions.unshift(InsertBlank)
-        setFilteredOptions(newOptions)
-        setBlankInserted(true)
-        options = newOptions
-      }
-
-      // Set first Option
-      const filteredCheck = checkOptionAvailable(field.value, options)
-      const baseCheck = field.value === undefined || checkOptionAvailable(field.value, options)
-      if (Array.isArray(options) && options.length && !filteredCheck && baseCheck) {
-        const first = options[0].value
-        form.setFieldValue(props.name, first)
-      }
-    }
-  })
-
-  const baseOptionsRef = useRef(baseOptions)
-  useEffect(() => {
-    if(!isEqual(baseOptions, baseOptionsRef.current)) {
-      setFilteredOptions(baseOptions)
-    }
-  }, [baseOptions])
-
-
-  useEffect(() => {
-    const baseCheck = checkOptionAvailable(field.value, filteredOptions)
-    const archivedOpt = baseOptions.find(opt => opt.value === field.value)
-    if (field.value !== undefined && !baseCheck && archivedOpt) {
-      setInsertOption(archivedOpt)
-    } else if (field.value !== undefined && !baseCheck) {
-      setInsertOption({ value: field.value, text: field.value })
-    }
-  }, [])
 
   const plaintext = props.plaintext !== undefined
     ? props.plaintext
@@ -167,7 +142,7 @@ const Select: React.FC<SelectProps> = (props) => {
         type='select'
         data-testid={props['data-testid'] || 'field-input'}
         invalid={props.invalid || invalid}
-        value={plaintext ? getSelectedText(field.value, filteredOptions) : field.value}
+        value={plaintext ? getSelectedText(field.value, opts) : field.value}
         onChange={(e) => {
           const { value } = e.target
           const formikOnChange = (value: any) => {
@@ -187,8 +162,7 @@ const Select: React.FC<SelectProps> = (props) => {
         {!plaintext
           ? (
             <Options
-              options={filteredOptions}
-              insertOption={insertOption}
+              options={opts}
             />
           ) : null
         }
