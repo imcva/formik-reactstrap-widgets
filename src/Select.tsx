@@ -110,12 +110,14 @@ const Select: React.FC<SelectProps> = (props) => {
     } else if (typeof InsertBlank === 'object') {
       lessArchived.unshift(InsertBlank);
     }
-    return lessArchived;
+    const valueAsString = lessArchived.map(o => {
+      return { ...o, value: String(o.value)}
+    })
+    return valueAsString;
   }, [base, children, InsertBlank, originalValue]) 
 
   useEffect(() => {
     if(opts.find(o => o.value === value) === undefined) {
-      console.log('Value not in opts', { new: opts[0].value, opts })
       form.setFieldValue(field.name, opts[0].value)
     }
   }, [opts, value, form])

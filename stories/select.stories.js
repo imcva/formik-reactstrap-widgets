@@ -17,9 +17,9 @@ const validateRequired = (value) => {
 }
 
 const options = [
-  { value: 'red', text: 'Red' },
-  { value: 'blue', text: 'Blue' },
-  { value: 'green', text: 'Green' }
+  { value: 1, text: 'Red' },
+  { value: 2, text: 'Blue' },
+  { value: 3, text: 'Green' }
 ] 
 
 const optionsWithArchived = [
